@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.dromara</groupId>
+        <artifactId>ruoyi-modules</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <groupId>com.hbj.kcat</groupId>
+    <artifactId>content-service</artifactId>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+    <dependency>
+        <groupId>org.dromara</groupId>
+        <artifactId>ruoyi-common-nacos</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.dromara</groupId>
+        <artifactId>ruoyi-common-sentinel</artifactId>
+    </dependency>
+
+    <!-- RuoYi Common Log -->
+    <dependency>
+        <groupId>org.dromara</groupId>
+        <artifactId>ruoyi-common-log</artifactId>
+    </dependency>
+
+    <!-- RuoYi 接口文档 -->
+    <dependency>
+        <groupId>org.dromara</groupId>
+        <artifactId>ruoyi-common-doc</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.dromara</groupId>
+        <artifactId>ruoyi-common-web</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.dromara</groupId>
+        <artifactId>ruoyi-common-mybatis</artifactId>
+    </dependency>
+
+    <!-- RuoYi 幂等性 -->
+    <dependency>
+        <groupId>org.dromara</groupId>
+        <artifactId>ruoyi-common-idempotent</artifactId>
+    </dependency>
+     <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-test</artifactId>
+        <scope>text</scope>
+     </dependency>
+        <dependency>
+        <groupId>io.minio</groupId>
+        <artifactId>minio</artifactId>
+        <version>8.5.7</version>
+    </dependency>
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>2.0.56</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+</project>
