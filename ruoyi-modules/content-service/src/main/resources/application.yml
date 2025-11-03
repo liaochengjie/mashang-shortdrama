@@ -32,3 +32,9 @@ spring:
       - optional:nacos:application-common.yml
       - optional:nacos:datasource.yml
       - optional:nacos:${spring.application.name}.yml
+
+
+myMinio:
+  endpoint: http://localhost:9000
+  accessKey: ${MYMINIO_ACCESSKEY}
+  secretKey: ${MYMINIO_SECRETKEY}
