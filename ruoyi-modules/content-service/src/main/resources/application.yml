@@ -10,7 +10,11 @@ spring:
   profiles:
     # 环境配置
     active: @profiles.active@
-
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+      enabled: on
 --- # nacos 配置
 spring:
   cloud:

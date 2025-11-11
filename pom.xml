@@ -380,7 +380,7 @@
         <module>ruoyi-api</module>
         <module>ruoyi-common</module>
         <module>ruoyi-example</module>
-        <module>ruoyi-modules/content-service</module>
+
     </modules>
     <packaging>pom</packaging>
 
