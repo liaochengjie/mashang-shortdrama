@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_18w7csn" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.41.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+  <bpmn:process id="vocationRequest" name="请假流程" isExecutable="true" camunda:historyTimeToLive="30">
+    <bpmn:extensionElements>
+      <camunda:properties>
+        <camunda:property name="userName" value="${userName}" />
+        <camunda:property name="vocationNum" value="${vocationNum}" />
+        <camunda:property name="reason" value="${reason}" />
+      </camunda:properties>
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_071vgjc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_071vgjc" sourceRef="StartEvent_1" targetRef="Activity_0ibhicd" />
+    <bpmn:userTask id="Activity_0ibhicd" name="提交申请">
+      <bpmn:incoming>Flow_071vgjc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1r564ul</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1q7o0fj</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:task id="Activity_0e8tpj0" name="机器审核">
+      <bpmn:incoming>Flow_1r564ul</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ea3fzf</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_1r564ul" name="小于7天" sourceRef="Activity_0ibhicd" targetRef="Activity_0e8tpj0" />
+    <bpmn:endEvent id="Event_1sbnm2j">
+      <bpmn:incoming>Flow_0ea3fzf</bpmn:incoming>
+      <bpmn:incoming>Flow_1q7o0fj</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0ea3fzf" sourceRef="Activity_0e8tpj0" targetRef="Event_1sbnm2j" />
+    <bpmn:sequenceFlow id="Flow_1q7o0fj" name="大于7天自动结束" sourceRef="Activity_0ibhicd" targetRef="Event_1sbnm2j" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0qulcs7">
+      <bpmndi:BPMNShape id="Activity_0e8tpj0_di" bpmnElement="Activity_0e8tpj0">
+        <dc:Bounds x="430" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0keq4el_di" bpmnElement="Activity_0ibhicd">
+        <dc:Bounds x="240" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="112" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1sbnm2j_di" bpmnElement="Event_1sbnm2j">
+        <dc:Bounds x="632" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1r564ul_di" bpmnElement="Flow_1r564ul">
+        <di:waypoint x="340" y="120" />
+        <di:waypoint x="430" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="365" y="102" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ea3fzf_di" bpmnElement="Flow_0ea3fzf">
+        <di:waypoint x="530" y="120" />
+        <di:waypoint x="632" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_071vgjc_di" bpmnElement="Flow_071vgjc">
+        <di:waypoint x="148" y="120" />
+        <di:waypoint x="240" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1q7o0fj_di" bpmnElement="Flow_1q7o0fj">
+        <di:waypoint x="290" y="160" />
+        <di:waypoint x="290" y="270" />
+        <di:waypoint x="650" y="270" />
+        <di:waypoint x="650" y="138" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="428" y="252" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
