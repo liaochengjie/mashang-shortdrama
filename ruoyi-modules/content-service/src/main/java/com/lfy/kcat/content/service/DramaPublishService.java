@@ -1,6 +1,7 @@
 package com.lfy.kcat.content.service;
 
 import com.lfy.kcat.content.domain.vo.DramaPublishVo;
+import org.dromara.common.core.dto.DramaAuthStartDTO;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,4 +13,6 @@ public interface DramaPublishService {
      * @return
      */
     Long publishDrama(DramaPublishVo dramaPublishVo);
+
+    String startDramaAuthProcess(DramaAuthStartDTO dramaAuthStartDTO);
 }

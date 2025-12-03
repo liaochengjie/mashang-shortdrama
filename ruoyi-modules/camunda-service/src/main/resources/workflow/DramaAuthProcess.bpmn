@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://example.com/bpmn" exporter="Camunda Modeler" exporterVersion="5.38.1">
+  <bpmn:process id="DramaAuthProcess" name="短剧审核流程" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Task_AI" name="AI内容审核&#10;情感识别" camunda:delegateExpression="${aiCheck}">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_Human" name="人工审核">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_X">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_Approve</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Reject</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:parallelGateway id="Gateway_P_Split">
+      <bpmn:incoming>Flow_Approve</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ehcjul</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0kadug5</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:serviceTask id="Task_Transcode" name="腾讯云转码" camunda:delegateExpression="${tecentVodTranslator}">
+      <bpmn:incoming>Flow_1ehcjul</bpmn:incoming>
+      <bpmn:outgoing>Flow_0kbeiag</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Task_RAG" name="RAG数据入库" camunda:delegateExpression="${ragDataHandler}">
+      <bpmn:incoming>Flow_0kadug5</bpmn:incoming>
+      <bpmn:outgoing>Flow_0dup0wk</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:parallelGateway id="Gateway_P_Join">
+      <bpmn:incoming>Flow_0kbeiag</bpmn:incoming>
+      <bpmn:incoming>Flow_0dup0wk</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToUpdate_FromApprove</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:serviceTask id="Task_UpdateDB" name="更新数据库状态" camunda:delegateExpression="${updateDramaAuthStatus}">
+      <bpmn:incoming>Flow_Reject</bpmn:incoming>
+      <bpmn:incoming>Flow_ToUpdate_FromApprove</bpmn:incoming>
+      <bpmn:outgoing>Flow_End</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_1">
+      <bpmn:incoming>Flow_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_AI" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_AI" targetRef="Task_Human" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Human" targetRef="Gateway_X" />
+    <bpmn:sequenceFlow id="Flow_Approve" name="审核通过" sourceRef="Gateway_X" targetRef="Gateway_P_Split">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approve}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Reject" name="审核不通过" sourceRef="Gateway_X" targetRef="Task_UpdateDB">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!approve}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_ToUpdate_FromApprove" sourceRef="Gateway_P_Join" targetRef="Task_UpdateDB" />
+    <bpmn:sequenceFlow id="Flow_End" sourceRef="Task_UpdateDB" targetRef="EndEvent_1" />
+    <bpmn:sequenceFlow id="Flow_1ehcjul" sourceRef="Gateway_P_Split" targetRef="Task_Transcode" />
+    <bpmn:sequenceFlow id="Flow_0kbeiag" sourceRef="Task_Transcode" targetRef="Gateway_P_Join" />
+    <bpmn:sequenceFlow id="Flow_0kadug5" sourceRef="Gateway_P_Split" targetRef="Task_RAG" />
+    <bpmn:sequenceFlow id="Flow_0dup0wk" sourceRef="Task_RAG" targetRef="Gateway_P_Join" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="DramaAuthProcess">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="156" y="112" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AI_di" bpmnElement="Task_AI">
+        <dc:Bounds x="244" y="90" width="150" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Human_di" bpmnElement="Task_Human">
+        <dc:Bounds x="447" y="90" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_X_di" bpmnElement="Gateway_X" isMarkerVisible="true">
+        <dc:Bounds x="607" y="99" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_UpdateDB_di" bpmnElement="Task_UpdateDB">
+        <dc:Bounds x="710" y="325" width="160" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <dc:Bounds x="766" y="472" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_P_Split_di" bpmnElement="Gateway_P_Split" isMarkerVisible="true">
+        <dc:Bounds x="760" y="99" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RAG_di" bpmnElement="Task_RAG">
+        <dc:Bounds x="860" y="210" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Transcode_di" bpmnElement="Task_Transcode">
+        <dc:Bounds x="860" y="84" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_P_Join_di" bpmnElement="Gateway_P_Join" isMarkerVisible="true">
+        <dc:Bounds x="1040" y="99" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="192" y="133" />
+        <di:waypoint x="244" y="133" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="394" y="130" />
+        <di:waypoint x="447" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="567" y="126" />
+        <di:waypoint x="609" y="126" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Approve_di" bpmnElement="Flow_Approve">
+        <di:waypoint x="657" y="124" />
+        <di:waypoint x="760" y="124" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="688" y="99" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Reject_di" bpmnElement="Flow_Reject">
+        <di:waypoint x="632" y="149" />
+        <di:waypoint x="632" y="370" />
+        <di:waypoint x="710" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="620" y="247" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ToUpdate_FromApprove_di" bpmnElement="Flow_ToUpdate_FromApprove">
+        <di:waypoint x="1090" y="124" />
+        <di:waypoint x="1110" y="124" />
+        <di:waypoint x="1110" y="370" />
+        <di:waypoint x="870" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_End_di" bpmnElement="Flow_End">
+        <di:waypoint x="786" y="415" />
+        <di:waypoint x="786" y="472" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ehcjul_di" bpmnElement="Flow_1ehcjul">
+        <di:waypoint x="810" y="124" />
+        <di:waypoint x="860" y="124" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kadug5_di" bpmnElement="Flow_0kadug5">
+        <di:waypoint x="785" y="149" />
+        <di:waypoint x="785" y="250" />
+        <di:waypoint x="860" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dup0wk_di" bpmnElement="Flow_0dup0wk">
+        <di:waypoint x="1000" y="250" />
+        <di:waypoint x="1065" y="250" />
+        <di:waypoint x="1065" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kbeiag_di" bpmnElement="Flow_0kbeiag">
+        <di:waypoint x="1000" y="124" />
+        <di:waypoint x="1040" y="124" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

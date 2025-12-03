@@ -6,11 +6,14 @@ import com.lfy.kcat.content.domain.bo.DramasBo;
 import com.lfy.kcat.content.domain.bo.EpisodesBo;
 import com.lfy.kcat.content.domain.vo.DramaPublishVo;
 import com.lfy.kcat.content.domain.vo.PublishActorsVo;
+import com.lfy.kcat.content.feign.CamundaFeignClient;
 import com.lfy.kcat.content.mapper.ActorsMapper;
 import com.lfy.kcat.content.mapper.DramaCategoriesMapper;
 import com.lfy.kcat.content.mapper.DramasMapper;
 import com.lfy.kcat.content.service.*;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.common.core.domain.R;
+import org.dromara.common.core.dto.DramaAuthStartDTO;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,8 @@ public class DramaPublishServiceImpl implements DramaPublishService {
     IEpisodesService episodesService;
     @Autowired
     private IEpisodesService iEpisodesService;
+    @Autowired
+    DramaAuthService dramaAuthService;
 
     @Transactional
     @Override
@@ -117,7 +122,35 @@ public class DramaPublishServiceImpl implements DramaPublishService {
             iEpisodesService.insertByBo(episode);
         }
         log.info("保存短剧成功");
+
+        //开启AI审核流程，调用startDramaAuthProcess
+        DramaAuthStartDTO dramaAuthStartDTO = new DramaAuthStartDTO();
+        dramaAuthStartDTO.setDramaId(dramaId);
+        dramaAuthStartDTO.setDramaName(dramasEntity.getTitle());
+        dramaAuthStartDTO.setDescription(dramasEntity.getDescription());
+
+        //TODO 保存短剧审核流程
+        String processId = startDramaAuthProcess(dramaAuthStartDTO);
+        DramaAuth dramaAuth = new DramaAuth();
+        dramaAuth.setDramaId(dramaId);
+        dramaAuth.setProcessId(processId);
+        dramaAuth.setAuthStatus(0);
+        dramaAuthService.save(dramaAuth);
+        //保存短剧和审核流程的关系
         return dramaId;
+    }
+
+    /**
+     * 通过远程调用用来进行短剧AI审核流程返回流程ID的
+     * @param dramaAuthStartDTO
+     * @return
+     */
+    @Autowired
+    CamundaFeignClient camundaFeignClient;
+    @Override
+    public String startDramaAuthProcess(DramaAuthStartDTO dramaAuthStartDTO) {
+        R r = camundaFeignClient.startDramaAuthProcess(dramaAuthStartDTO);
+        return r.getData().toString();
     }
 
     @NotNull

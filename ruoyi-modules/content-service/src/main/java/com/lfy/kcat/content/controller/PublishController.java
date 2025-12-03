@@ -1,9 +1,13 @@
 package com.lfy.kcat.content.controller;
 
+import com.lfy.kcat.content.domain.bo.DramasBo;
 import com.lfy.kcat.content.domain.vo.DramaPublishVo;
+import com.lfy.kcat.content.feign.CamundaFeignClient;
 import com.lfy.kcat.content.service.DramaPublishService;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.common.core.constant.CamundaConstants;
 import org.dromara.common.core.domain.R;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class PublishController {
-
+    @Autowired
+    CamundaFeignClient camundaFeignClient;
 
     DramaPublishService DramaPublishService;
     public PublishController(DramaPublishService dramaPublishService) {
@@ -26,8 +31,15 @@ public class PublishController {
 
     @PostMapping("/publish")
     public R publish(@RequestBody DramaPublishVo dramaPublishVo) {
+        //1.保存和发布短剧
         log.info("短剧发布：内容：{}", dramaPublishVo);
         Long dramaId=DramaPublishService.publishDrama(dramaPublishVo);
+
+
+        //2.启动短剧审核
+
+
+        //保存短剧和审核流对应关系
         return R.ok();
     }
 }

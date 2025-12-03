@@ -3,10 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-
+    <parent>
+        <groupId>org.dromara</groupId>
+        <artifactId>ruoyi-modules</artifactId>
+        <version>${revision}</version>
+    </parent>
   <groupId>com.lfy.kcat.workflow</groupId>
   <artifactId>camunda-service</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,6 +21,13 @@
 
   <dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-bom</artifactId>
+            <version>1.0.1</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -25,6 +36,11 @@
         <scope>import</scope>
       </dependency>
 
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>ruoyi-common-core</artifactId>
+            <version>2.4.1</version>
+        </dependency>
       <dependency>
         <groupId>org.camunda.bpm</groupId>
         <artifactId>camunda-bom</artifactId>
@@ -36,6 +52,29 @@
   </dependencyManagement>
 
   <dependencies>
+      <!--引入ollama的依赖-->
+      <dependency>
+          <groupId>org.springframework.ai</groupId>
+          <artifactId>spring-ai-starter-model-ollama</artifactId>
+      </dependency>
+
+
+      <dependency>
+          <groupId>org.dromara</groupId>
+          <artifactId>ruoyi-common-nacos</artifactId>
+      </dependency>
+
+
+      <!-- RuoYi 接口文档 -->
+      <dependency>
+          <groupId>org.dromara</groupId>
+          <artifactId>ruoyi-common-doc</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-web</artifactId>
+      </dependency>
     <dependency>
       <groupId>org.camunda.bpm.springboot</groupId>
       <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
@@ -74,6 +113,10 @@
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-starter-test</artifactId>
           <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.dromara</groupId>
+          <artifactId>ruoyi-common-core</artifactId>
       </dependency>
   </dependencies>
 

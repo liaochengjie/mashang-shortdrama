@@ -1,0 +1,19 @@
+spring:
+  ai:
+    deepseek:
+      api-key: ${SPRING_AI_DEEPSEEK_API_KEY}
+      base-url: https://api.deepseek.com
+    mcp:
+      client:
+        sse:
+          connections:
+            server2:
+              url: http://localhost:12000
+              sse-endpoint: /api/sse
+        toolcallback:
+          enabled: true
+logging:
+  level:
+    io.modelcontextprotocol: trace
+    org.springframework: trace
+
