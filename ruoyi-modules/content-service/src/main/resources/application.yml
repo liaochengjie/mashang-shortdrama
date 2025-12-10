@@ -47,7 +47,7 @@ vod:
   secretId: ${VOD_SECRETID}
   secretKey: ${VOD_SECRETKEY}
   stuAppId: 1500043826
-  region: ap-chongqing
+  region: ap-guangzhou
 ---
 spring:
   ai:

@@ -1,4 +1,4 @@
-package com.lfy.kcat.content.service;
+package com.lfy.kcat.content.biz;
 
 import com.lfy.kcat.content.domain.vo.DramaPublishVo;
 import org.dromara.common.core.dto.DramaAuthStartDTO;

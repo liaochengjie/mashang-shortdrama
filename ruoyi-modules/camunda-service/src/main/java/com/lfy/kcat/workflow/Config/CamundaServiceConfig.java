@@ -1,11 +1,14 @@
 package com.lfy.kcat.workflow.Config;
 
 import com.lfy.kcat.workflow.ai.OllamaModerationService;
+import com.lfy.kcat.workflow.biz.CamundaJavaDelegateHandler;
+import com.lfy.kcat.workflow.feign.ContentServiceFeign;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.task.Task;
+import org.dromara.common.core.dto.DramaAuthCompleteDTO;
 import org.dromara.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,33 +19,78 @@ import java.util.Map;
 @Configuration
 public class CamundaServiceConfig {
     @Autowired
-    TaskService taskService;
+    CamundaJavaDelegateHandler  camundaJavaDelegateHandler;
 
     @Autowired
-    OllamaModerationService ollamaModerationService;
+    ContentServiceFeign contentServiceFeign;
+
+    private DramaAuthCompleteDTO buildCompleteDTO(Map<String, Object> variables) {
+        System.out.println(variables);
+        DramaAuthCompleteDTO dramaAuthCompleteDTO = new DramaAuthCompleteDTO();
+        dramaAuthCompleteDTO.setDramaId((Long) variables.get("dramaId"));
+        Object auditReason = variables.get("auditReason");
+        if (auditReason != null) {
+            dramaAuthCompleteDTO.setAuditReason(auditReason.toString());
+        }
+
+        dramaAuthCompleteDTO.setAuditStatus((String) variables.get("auditStatus"));
+        dramaAuthCompleteDTO.setApprove((Boolean) variables.get("approve"));
+        dramaAuthCompleteDTO.setAuthName((String) variables.get("authName" ));
+        dramaAuthCompleteDTO.setAuthStatus((String) variables.get("authStatus"));
+        dramaAuthCompleteDTO.setAuthName((String) variables.get("authName" ));
+        dramaAuthCompleteDTO.setAuthStatus((String) variables.get("authStatus"));
+        System.out.println(dramaAuthCompleteDTO);
+        return dramaAuthCompleteDTO;
+    }
+    /**
+     * 更新数据库状态
+     * @return
+     */
+    @Bean("updateDramaAuthStatus")
+    public JavaDelegate updateDramaAuthStatus(){
+        return (execution)->{
+            Map<String, Object> variables = execution.getVariables();
+            log.info("审核短剧信息为:{}",variables);
+            DramaAuthCompleteDTO dramaAuthCompleteDTO=buildCompleteDTO(variables);
+            contentServiceFeign.updateDramaAuthStatus(dramaAuthCompleteDTO);
+        };
+    }
+
+
+
+    /**
+     * rag数据入库
+     * @return
+     */
+    @Bean("ragDataHandler")
+    public JavaDelegate ragDataHandler(){
+        return (execution)->{
+            camundaJavaDelegateHandler.ragDataHandler(execution);
+        };
+    }
+
+
+    /**
+     * 腾讯云转码
+     * @return
+     */
+    @Bean("tecentVodTranslator")
+    public JavaDelegate tecentVodTranslator(){
+        return (execution)->{
+            camundaJavaDelegateHandler.tecentVodTranslator(execution);
+        };
+    }
+    /**
+     * AI审核代理
+     * @return
+     */
     @Bean("aiCheck")
     public JavaDelegate aiCheck() {
         return new JavaDelegate(){
             @Override
             public void execute(DelegateExecution execution) throws Exception {
-                Map<String, Object> variables = execution.getVariables();
-                Object dramaId = variables.get("dramaId");
-                Object dramaName = variables.get("dramaName");
-                Object description = variables.get("description");
-                log.info("AI流程审核启动，正在审核{}{}{}", dramaId, dramaName, description);
+                camundaJavaDelegateHandler.aiCheck(execution);
 
-                //审核名字和短剧简介（名字必为非空，对短剧简介想要非空判断）
-                if(StringUtils.isEmpty(dramaName.toString())) {
-                    String resultName = ollamaModerationService.moderation(dramaName.toString());
-                    variables.put("AuthName", resultName);
-                }
-                if (StringUtils.isEmpty(description.toString())) {
-                    String resultDescription = ollamaModerationService.moderation(description.toString());
-                    variables.put("AuthDescription", resultDescription);
-                }
-
-                //审核完毕之后将审核结果放入到variables的map中，然后赋给execution
-                execution.setVariables(variables);
             }
 
         };
@@ -51,18 +99,7 @@ public class CamundaServiceConfig {
     @Bean("audiService")
     JavaDelegate audiService() {
         return (execution)->{
-            System.out.println("audiService 机器自动审核");
-            Map<String, Object> variables = execution.getVariables();
-            System.out.println("variables:" + variables);
-            //机器正在审核
-            Thread.sleep(60*1000);
-            System.out.println("机器审核完毕");
-            String instanceId = execution.getProcessInstanceId();
-            Task task = taskService.createTaskQuery()
-                .processInstanceId(instanceId)
-                .singleResult();
-
-            taskService.complete(task.getId());
+           camundaJavaDelegateHandler.audiService(execution);
         };
     }
 

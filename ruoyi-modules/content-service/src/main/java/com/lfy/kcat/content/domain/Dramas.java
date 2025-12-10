@@ -55,6 +55,11 @@ public class Dramas extends BaseEntity {
     private String trailerUrl;
 
     /**
+     * 预告片信息流URL
+     */
+    private String trailerInfoflowUrl;
+
+    /**
      * 简介
      */
     private String description;

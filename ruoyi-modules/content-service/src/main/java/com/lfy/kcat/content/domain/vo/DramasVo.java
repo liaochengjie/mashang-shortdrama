@@ -67,6 +67,10 @@ public class DramasVo implements Serializable {
     private String trailerUrl;
 
     /**
+     * 预告片信息流URL
+     */
+    private String trailerInfoflowUrl;
+    /**
      * 简介
      */
     @ExcelProperty(value = "简介")
