@@ -1,6 +1,6 @@
 package com.lfy.kcat.content.vod.config;
 
-import com.lfy.kcat.content.vod.properties.vodProperties;
+import com.lfy.kcat.content.vod.properties.VodProperties;
 import com.qcloud.vod.VodUploadClient;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.vod.v20180717.VodClient;
@@ -11,8 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class vodConfig {
     @Autowired
-    vodProperties vodProperties;
-
+    VodProperties vodProperties;
 
 
     @Bean

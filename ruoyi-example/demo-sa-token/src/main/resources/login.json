@@ -1,0 +1,17 @@
+{
+  "createTime": 1765443597934,
+  "dataMap": {},
+  "historyTerminalCount": 1,
+  "id": "satoken:login:session:123456",
+  "loginId": "123456",
+  "loginType": "login",
+  "terminalList": [
+    {
+      "createTime": 1765443598127,
+      "deviceType": "DEF",
+      "index": 1,
+      "tokenValue": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiIxMjM0NTYiLCJyblN0ciI6InBYRlk3RUVabXRVTjd2Rm56VVhHY3pkbFFObGRvN1pWIiwidXNlcm5hbWUiOiJsY2oiLCJhZ2UiOjE4fQ.ovEb6AedfOIO5l15WItNGXp5awUgkJZemGYdXadRnEI"
+    }
+  ],
+  "type": "Account-Session"
+}

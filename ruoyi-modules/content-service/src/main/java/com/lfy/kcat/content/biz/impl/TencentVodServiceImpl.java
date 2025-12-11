@@ -84,8 +84,17 @@ public class TencentVodServiceImpl implements TencentVodService {
 
 
         //TODO视频画质流 处理每一集获取到所有转换结果并保存数据库；长业务
-        //后台慢慢执行
+        //TODO后台慢慢执行；【长业务容忍稳定性变数】
+        //TODO数据库和腾讯云数据库做到最终一执行【长作业后台慢慢执行，直到完成】
     }
+
+    /**
+     * 1.全平台临时文件兼容性：JaVa提供任何平台准备临时目录，创建文件
+     * 2.可靠性的事件消费：做完的事情，保存事件：主动拉取事件。判断是自已的事件。回复确认
+     * 3.阻塞等待结果返回（无限次稍后重试）：判断事件是否FINISH，才能获取结果。
+     * @param dramaId
+     * @param trailerUrl
+     */
     private void uploadAndTranslateInfoFlowReturnResult(Long dramaId,String trailerUrl) {
         //1.上传预告片
         String fileId = uploadVodTranslateInfoFlow(trailerUrl);
@@ -118,12 +127,11 @@ public class TencentVodServiceImpl implements TencentVodService {
     private String uploadVodTranslateInfoFlow(String trailerUrl) {
         String result=null;
         try {
-            //获取该剧的结尾名字
-            String[] split = trailerUrl.split("_");
-            String name=split[1];
+
 
             //根据url地址进行上传
-            File trailerFile = uploadAndSaveTemp(trailerUrl,name);
+            File trailerFile = uploadAndSaveTemp(trailerUrl);
+
             //获取一个上传请求
             VodUploadRequest vodUploadRequest = new VodUploadRequest();
             //获取其盘位的路径
@@ -185,10 +193,12 @@ public class TencentVodServiceImpl implements TencentVodService {
     /**
      * 下载喝保存临时数据
      * @param trailerUrl
-     * @param name
      * @return
      */
-    private File uploadAndSaveTemp(String trailerUrl,String name) {
+    private File uploadAndSaveTemp(String trailerUrl) {
+        //获取该剧的结尾名字
+        String[] split = trailerUrl.split("_");
+        String name=split[1];
 
         File trailerFile = null;
         URL url = null;

@@ -13,6 +13,7 @@
         <module>ruoyi-test-mq</module>
         <module>demo-mcp-servier</module>
         <module>demo-mcp-client</module>
+        <module>demo-sa-token</module>
     </modules>
 
     <artifactId>ruoyi-example</artifactId>
