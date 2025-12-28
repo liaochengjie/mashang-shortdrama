@@ -40,6 +40,11 @@ public class AuthCheckServiceImpl implements AuthCheckService {
     DramaAuthMapper dramaAuthMapper;
 
 
+    /**
+     * 用于得到AI审核状态的其中的方法（通过短剧ID获取到流程ID）
+     * @param dramaId
+     * @return
+     */
     @Override
     public String getProcessIdByDramaId(String dramaId) {
         DramaAuth dramaAuth = dramaAuthService.getOne(Wrappers.lambdaQuery(DramaAuth.class).eq(DramaAuth::getDramaId, dramaId));
@@ -77,8 +82,8 @@ public class AuthCheckServiceImpl implements AuthCheckService {
 
     @Override
     public void saveManualAuthData(ManualAuthTaskVo manualAuthTaskVo, String authorization) {
-        log.info("manualAuthTaskVo:{}",manualAuthTaskVo);
-        //跳过令牌来获取审核人
+        log.info("人工审核更新数据库中,然后讲camunda从人工审核推进到下一步ManualAuthTaskVo:{}",manualAuthTaskVo);
+        //通过令牌来获取审核人
         //3、当前登录到系统中的人是谁。
         String payLoad = authorization.split("\\.")[1];
         String decode = SaBase64Util.decode(payLoad);

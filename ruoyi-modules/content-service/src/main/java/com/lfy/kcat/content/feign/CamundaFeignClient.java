@@ -11,6 +11,11 @@ import java.util.Map;
 @FeignClient("camunda-service")
 public interface CamundaFeignClient {
 
+    /**
+     * 人工审核任务
+     * @param dramaAuthManualTaskDTO
+     * @return
+     */
     @PutMapping("/process/authtask")
     R claimManualAuthTaskAndComplete(@RequestBody DramaAuthManualTaskDTO dramaAuthManualTaskDTO);
 

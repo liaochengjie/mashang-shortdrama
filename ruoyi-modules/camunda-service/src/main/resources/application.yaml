@@ -22,7 +22,6 @@ spring:
   config:
     import:
       - optional:nacos:application-common.yml
-
       - optional:nacos:${spring.application.name}.yml
 
 ---

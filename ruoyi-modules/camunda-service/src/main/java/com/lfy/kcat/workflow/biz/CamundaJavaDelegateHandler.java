@@ -1,6 +1,7 @@
 package com.lfy.kcat.workflow.biz;
 
 import com.lfy.kcat.workflow.ai.OllamaModerationService;
+import com.lfy.kcat.workflow.feign.ContentServiceFeign;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -22,7 +23,27 @@ public class CamundaJavaDelegateHandler {
     @Autowired
     OllamaModerationService ollamaModerationService;
 
+    @Autowired
+    ContentServiceFeign contentServiceFeign;
 
+    private DramaAuthCompleteDTO buildCompleteDTO(Map<String, Object> variables) {
+        System.out.println(variables);
+        DramaAuthCompleteDTO dramaAuthCompleteDTO = new DramaAuthCompleteDTO();
+        dramaAuthCompleteDTO.setDramaId((Long) variables.get("dramaId"));
+        Object auditReason = variables.get("auditReason");
+        if (auditReason != null) {
+            dramaAuthCompleteDTO.setAuditReason(auditReason.toString());
+        }
+
+        dramaAuthCompleteDTO.setAuditStatus((String) variables.get("auditStatus"));
+        dramaAuthCompleteDTO.setApprove((Boolean) variables.get("approve"));
+        dramaAuthCompleteDTO.setAuthName((String) variables.get("authName" ));
+        dramaAuthCompleteDTO.setAuthStatus((String) variables.get("authStatus"));
+        dramaAuthCompleteDTO.setAuthName((String) variables.get("authName" ));
+        dramaAuthCompleteDTO.setAuthStatus((String) variables.get("authStatus"));
+        System.out.println(dramaAuthCompleteDTO);
+        return dramaAuthCompleteDTO;
+    }
 
     public void aiCheck(DelegateExecution execution) {
         Map<String, Object> variables = execution.getVariables();
@@ -70,10 +91,12 @@ public class CamundaJavaDelegateHandler {
      * @param execution
      */
     public void tecentVodTranslator(DelegateExecution execution) {
-        log.info("腾讯云转码...");
-
         Map<String, Object> variables = execution.getVariables();
+        log.info("腾讯云转码...{}",variables);
 
+        DramaAuthCompleteDTO dramaAuthCompleteDTO = buildCompleteDTO(variables);
+        //TODO 远程调用腾讯云转码
+        contentServiceFeign.tencentVodTranslator(dramaAuthCompleteDTO);
     }
 
     /**

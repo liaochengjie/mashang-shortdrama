@@ -16,6 +16,8 @@
         <module>ruoyi-workflow</module>
         <module>content-service</module>
         <module>camunda-service</module>
+        <module>interaction-service</module>
+        <module>user-service</module>
     </modules>
 
     <artifactId>ruoyi-modules</artifactId>

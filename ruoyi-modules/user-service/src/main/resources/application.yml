@@ -1,0 +1,66 @@
+# Tomcat
+server:
+  port: 10002
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: user-service
+  profiles:
+    # 环境配置
+    active: @profiles.active@
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+      enabled: on
+--- # nacos 配置
+spring:
+  cloud:
+    nacos:
+      # nacos 服务地址
+      server-addr: @nacos.server@
+      username: @nacos.username@
+      password: ${SPRING_CLOUD_NACOS_PASSWORD}
+      discovery:
+        # 注册组
+        group: @nacos.discovery.group@
+        namespace: ${spring.profiles.active}
+      config:
+        # 配置组
+        group: @nacos.config.group@
+        namespace: ${spring.profiles.active}
+  config:
+    import:
+      - optional:nacos:application-common.yml
+      - optional:nacos:datasource.yml
+      - optional:nacos:${spring.application.name}.yml
+
+sa-token:
+  # token名称(同时也是cookie名称)
+  token-name: satoken
+  #token有效期（单位：秒）默认3e天，-1代表永久有效
+  timeout: 2592000
+  #token最低活跃频率（单位：秒），如果token超过此时间没有访问系统就会被冻结，默认-1代表不限制，永不冻结
+  active-timeout: -1
+  #是否允许同一账号多地同时登录（为true时允许一起登录，为false时新登录挤掉旧登录）
+  is-concurrent: true
+  #在多人登录同一账号时，是否共用一个token（为true时所有登录共用一个token，为false时每次登录新创建一个token
+  is-share: false
+  # token风格(默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik)
+  token-style: uuid
+  #是否输出操作日志
+  is-log: true
+---
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ${SPRING_DATA_REDIS_PASSWORD}
+      database: 1
+
+sa-token:
+  # jwt秘钥
+  jwt-secret-key: lcjfirstjwtnow

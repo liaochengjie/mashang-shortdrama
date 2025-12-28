@@ -8,6 +8,7 @@ import org.dromara.common.core.domain.R;
 import org.dromara.common.core.dto.DramaAuthCompleteDTO;
 import org.dromara.common.core.dto.DramaAuthStartDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
@@ -32,11 +33,13 @@ public class AuthCheckController {
      * 人工审核
      * @return
      */
+
     @PostMapping("/dramas/authcheck")
     public R manualCheckTask(@RequestBody ManualAuthTaskVo manualAuthTaskVo,
                              @RequestHeader("Authorization") String authorization) {
         //更新数据库表并且推进流程
-        log.info("ManualAuthTaskVo:{}",manualAuthTaskVo);
+        log.info("人工审核结束，更新数据库中人工审核的结果，结果为{}",manualAuthTaskVo.getAuditReason());
+        log.info("人工审核的ManualAuthTaskVo:{}",manualAuthTaskVo);
         authCheckService.saveManualAuthData(manualAuthTaskVo,authorization);
 
         return R.ok();

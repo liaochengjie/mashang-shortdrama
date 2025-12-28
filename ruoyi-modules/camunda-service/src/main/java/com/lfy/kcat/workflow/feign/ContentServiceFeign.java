@@ -4,6 +4,7 @@ import org.dromara.common.core.domain.R;
 import org.dromara.common.core.dto.DramaAuthCompleteDTO;
 import org.dromara.common.core.dto.DramaAuthStartDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -16,4 +17,7 @@ public interface ContentServiceFeign {
      */
     @PutMapping("/dramas/updateAuthDb")
     R updateDramaAuthStatus(@RequestBody DramaAuthCompleteDTO dramaAuthCompleteDTO);
+
+    @PostMapping("/tencent/vod/translate")
+    R tencentVodTranslator(@RequestBody DramaAuthCompleteDTO dramaAuthCompleteDTO);
 }

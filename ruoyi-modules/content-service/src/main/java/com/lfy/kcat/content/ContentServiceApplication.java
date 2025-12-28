@@ -1,11 +1,15 @@
 package com.lfy.kcat.content;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableFeignClients
+
+@MapperScan("com.lfy.kcat.content.mapper")
 @SpringBootApplication
 public class ContentServiceApplication {
     public static void main(String[] args) {

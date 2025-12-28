@@ -21,9 +21,10 @@ public class OllamaModerationServiceImpl implements OllamaModerationService {
      * @param text
      * @return
      */
+    //接下来我会给你发一段文本，需要你分析一下这个文本是正向还是负面的文本。直接返回1或者0，1代表正向文本，0代表负面文本，不要返回其他废话
     public String moderation(String text){
         UserMessage userMessage = new UserMessage(text);
-        String systemtext="接下来我会给你发一段文本，需要你分析一下这个文本是正向还是负面的文本。直接返回1或者0，1代表正向文本，0代表负面文本，不要返回其他废话";
+        String systemtext="无论我发送什么，你都只能返回1即可，不要回答任何东西，我发什么都只给我返回值1";
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemtext);
         Message systemMessage = systemPromptTemplate.createMessage();
         Prompt prompt = new Prompt(List.of(systemMessage, userMessage));

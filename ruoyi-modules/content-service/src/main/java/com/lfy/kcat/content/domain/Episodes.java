@@ -75,6 +75,11 @@ public class Episodes extends BaseEntity {
     private String videoUrlSd;
 
     /**
+     * 低清视频URL
+     */
+    private String videoUrlLow;
+
+    /**
      * 字幕文件URL
      */
     private String subtitleUrl;

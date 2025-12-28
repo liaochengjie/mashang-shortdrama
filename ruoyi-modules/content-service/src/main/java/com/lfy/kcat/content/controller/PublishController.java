@@ -30,11 +30,11 @@ public class PublishController {
     @PostMapping("/publish")
     public R publish(@RequestBody DramaPublishVo dramaPublishVo) {
         //1.保存和发布短剧
+        //2.启动短剧审核,远程调用camundafeign,在publishDrama方法中
         log.info("短剧发布：内容：{}", dramaPublishVo);
         Long dramaId=DramaPublishService.publishDrama(dramaPublishVo);
 
 
-        //2.启动短剧审核
 
 
         //保存短剧和审核流对应关系

@@ -18,7 +18,7 @@ public class TencentVodController {
 
     @PostMapping("/vod/translate")
     public R tencentVodTranslator(@RequestBody DramaAuthCompleteDTO dramaAuthCompleteDTO) {
-        tencentVodService.uploadDrama(dramaAuthCompleteDTO.getDramaId());
+        tencentVodService.vodTranslator(dramaAuthCompleteDTO.getDramaId());
 
 
         return R.ok();
