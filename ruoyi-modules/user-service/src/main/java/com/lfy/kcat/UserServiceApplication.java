@@ -13,7 +13,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     MybatisPlusConfiguration.class})
 
 public class UserServiceApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class,args);
         System.out.println("(♥◠‿◠)ﾉﾞ  用户服务模块启动成功   ლ(´ڡ`ლ)ﾞ  ");
