@@ -2,6 +2,10 @@ package com.lfy.kcat.content.mapper;
 
 import com.lfy.kcat.content.domain.DramaTags;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lfy.kcat.content.domain.Tags;
+import feign.Param;
+
+import java.util.List;
 
 /**
 * @author 廖成杰
@@ -11,6 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface DramaTagsMapper extends BaseMapper<DramaTags> {
 
+    List<Tags> getDramaTagsByDramaId(@Param("dramaId") Long dramaId);
 }
 
 

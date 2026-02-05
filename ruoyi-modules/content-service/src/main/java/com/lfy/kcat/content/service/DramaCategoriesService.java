@@ -1,7 +1,11 @@
 package com.lfy.kcat.content.service;
 
+import com.lfy.kcat.content.domain.Categories;
 import com.lfy.kcat.content.domain.DramaCategories;
 import com.baomidou.mybatisplus.extension.service.IService;
+import feign.Param;
+
+import java.util.List;
 
 /**
 * @author 廖成杰
@@ -10,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface DramaCategoriesService extends IService<DramaCategories> {
 
+    List<Categories> getDramaCategoriesInfo(Long dramaId);
 }

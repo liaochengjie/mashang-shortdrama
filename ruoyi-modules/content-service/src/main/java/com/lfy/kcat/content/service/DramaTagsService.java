@@ -2,6 +2,9 @@ package com.lfy.kcat.content.service;
 
 import com.lfy.kcat.content.domain.DramaTags;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lfy.kcat.content.domain.Tags;
+
+import java.util.List;
 
 /**
 * @author 廖成杰
@@ -10,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface DramaTagsService extends IService<DramaTags> {
 
+    List<Tags> getDramaTagsByDramaId(Long dramaId);
 }

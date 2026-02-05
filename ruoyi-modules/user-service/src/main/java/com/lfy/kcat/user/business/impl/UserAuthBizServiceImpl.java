@@ -24,9 +24,12 @@ import com.lfy.kcat.user.vo.UserInfoRespVo;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.core.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Service
 @Slf4j
@@ -47,57 +50,77 @@ public class UserAuthBizServiceImpl implements UserAuthBizService {
 
     @Autowired
     UserCollectionsService userCollectionsService;
+
+    @Autowired
+    @Qualifier("appThreadPoolExecutor")
+    ThreadPoolExecutor executor;
     @Override
     public UserInfoRespVo getUserInfo(long loginId) {
         //1：根据loginId查询用户信息
         LambdaQueryWrapper<Users> wrapper1 = Wrappers.lambdaQuery(Users.class)
             .eq(Users::getUserId, loginId);
         Users users = usersService.getOne(wrapper1);
+
+        UserInfoRespVo userInfoRespVo = new UserInfoRespVo();
+
         //如果user为空，不存在该用户
         if(users==null){
             log.info("用户不存在，loginId为:{}",loginId);
             return null;
         }
-        //2：如果user不为空，存在该用户，将用户信息封装到UserInfoRespVo中
-        String avatar = users.getAvatar();
-        String nickname = users.getNickname();
-        String phone = users.getPhone();
-        Date birthday = users.getBirthday();
-        String signature = users.getSignature();
-        UserInfoRespVo.UserBaseInfo baseInfo = new UserInfoRespVo.UserBaseInfo();
-        baseInfo.setAvatar(avatar);
-        baseInfo.setNickname(nickname);
-        baseInfo.setPhone(phone);
-        baseInfo.setBirthday(birthday);
-        baseInfo.setSignature(signature);
-        //3：将baseInfo封装到UserInfoRespVo中
-        UserInfoRespVo userInfoRespVo = new UserInfoRespVo();
-        userInfoRespVo.setBaseInfo(baseInfo);
+        CompletableFuture<Void> baseInfoFuture = CompletableFuture.runAsync(() -> {
+            //2：如果user不为空，存在该用户，将用户信息封装到UserInfoRespVo中
+            String avatar = users.getAvatar();
+            String nickname = users.getNickname();
+            String phone = users.getPhone();
+            Date birthday = users.getBirthday();
+            String signature = users.getSignature();
+            UserInfoRespVo.UserBaseInfo baseInfo = new UserInfoRespVo.UserBaseInfo();
+            baseInfo.setAvatar(avatar);
+            baseInfo.setNickname(nickname);
+            baseInfo.setPhone(phone);
+            baseInfo.setBirthday(birthday);
+            baseInfo.setSignature(signature);
+            //3：将baseInfo封装到UserInfoRespVo中
 
-        //4：查询关注数量
-        LambdaQueryWrapper<UserFollows> eq = Wrappers.lambdaQuery(UserFollows.class)
-            .eq(UserFollows::getFollowerId, loginId);
-        long followCount = userFollowsService.count(eq);
-        //5：查询粉丝数量
-        LambdaQueryWrapper<UserFollows> eq1 = Wrappers.lambdaQuery(UserFollows.class)
-            .eq(UserFollows::getFolloweeId, loginId);
-        long fansCount = userFollowsService.count(eq1);
+            userInfoRespVo.setBaseInfo(baseInfo);
+        });
 
-        //6.将粉丝数量和关注数量封装
-        userInfoRespVo.setFollowCount(followCount);
-        userInfoRespVo.setFansCount(fansCount);
+        CompletableFuture<Void> followFuture = CompletableFuture.runAsync(() -> {
+            //4：查询关注数量
+            LambdaQueryWrapper<UserFollows> eq = Wrappers.lambdaQuery(UserFollows.class)
+                .eq(UserFollows::getFollowerId, loginId);
+            long followCount = userFollowsService.count(eq);
+            userInfoRespVo.setFollowCount(followCount);
+        });
 
-        LambdaQueryWrapper<UserBrowseHistory> eq2 = Wrappers.lambdaQuery(UserBrowseHistory.class)
-            .eq(UserBrowseHistory::getUserId, loginId);
-        long historyCount = userBrowseHistoryService.count(eq2);
-        //7.将历史数量封装
-        userInfoRespVo.setHistoryCount(historyCount);
+        CompletableFuture<Void> fanFuture = CompletableFuture.runAsync(() -> {
+            //5：查询粉丝数量
+            LambdaQueryWrapper<UserFollows> eq1 = Wrappers.lambdaQuery(UserFollows.class)
+                .eq(UserFollows::getFolloweeId, loginId);
+            long fansCount = userFollowsService.count(eq1);
+            userInfoRespVo.setFansCount(fansCount);
+        });
+
+
+        CompletableFuture<Void> historyFuture = CompletableFuture.runAsync(() -> {
+            LambdaQueryWrapper<UserBrowseHistory> eq2 = Wrappers.lambdaQuery(UserBrowseHistory.class)
+                .eq(UserBrowseHistory::getUserId, loginId);
+            long historyCount = userBrowseHistoryService.count(eq2);
+
+            userInfoRespVo.setHistoryCount(historyCount);
+        });
+
 
         //8.将收藏数量封装
-        LambdaQueryWrapper<UserCollections> eq3 = Wrappers.lambdaQuery(UserCollections.class)
-            .eq(UserCollections::getUserId, loginId);
-        long collectionCount = userCollectionsService.count(eq3);
-        userInfoRespVo.setFollowingCount(collectionCount);
+        CompletableFuture<Void> FollowingFuture = CompletableFuture.runAsync(() -> {
+            LambdaQueryWrapper<UserCollections> eq3 = Wrappers.lambdaQuery(UserCollections.class)
+                .eq(UserCollections::getUserId, loginId);
+            long collectionCount = userCollectionsService.count(eq3);
+            userInfoRespVo.setFollowingCount(collectionCount);
+        });
+
+        CompletableFuture.allOf(baseInfoFuture,followFuture,fanFuture,historyFuture,FollowingFuture).join();
 
         return userInfoRespVo;
     }

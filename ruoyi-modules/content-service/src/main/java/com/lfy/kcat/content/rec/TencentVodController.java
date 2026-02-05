@@ -1,4 +1,4 @@
-package com.lfy.kcat.content.reccontroller;
+package com.lfy.kcat.content.rec;
 
 import com.lfy.kcat.content.biz.TencentVodService;
 import org.dromara.common.core.domain.R;

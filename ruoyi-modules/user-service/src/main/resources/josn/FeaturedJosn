@@ -1,0 +1,180 @@
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "episodes": [
+      {
+        "episode": 7,
+        "title": "第37集 民队识二能白接",
+        "dramaTitle": "至才带提积高命极九么张外些",
+        "description": "增间天也向矿况么门义可油切如子定具法。特据去先速了记离必教门米花华快题队。办清如分关色这向质节商展速。",
+        "duration": "45:15",
+        "likeCount": 57393,
+        "favoriteCount": 108864,
+        "commentCount": 47601,
+        "viewCount": 4805095,
+        "isLiked": true,
+        "isFavorited": true,
+        "ratingCount": 19947,
+        "drama": {
+          "id": 5902,
+          "title": "至才带提积高命极九么张外些",
+          "cover": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&h=300&fit=crop",
+          "tags": [
+            "动作",
+            "冒险"
+          ],
+          "category": "medical",
+          "isNew": true,
+          "isPopular": true,
+          "director": "邓娟",
+          "actors": [
+            {
+              "name": "叶平",
+              "role": "配角",
+              "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop"
+            },
+            {
+              "name": "何敏",
+              "role": "主角",
+              "avatar": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=50&h=50&fit=crop"
+            }
+          ]
+        },
+        "hotScore": 94,
+        "episodeTags": [
+          "搞笑",
+          "轻松",
+          "治愈"
+        ],
+        "releaseDate": "2006-05-29",
+        "comprehensiveScore": 100,
+        "progress": 49,
+        "lastWatchTime": "1985-09-18",
+        "recommendScore": 89,
+        "freshness": 94,
+        "cover": "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=400&h=225&fit=crop",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "rank": 1
+      },
+      {
+        "episode": 34,
+        "title": "第34集 下因各别积",
+        "dramaTitle": "造容世场质验市来现发",
+        "description": "社每情南广之个求一须还广机。一具千装之直志放少有技数直住组还。间图及你太书地物复天区装好题一后气。",
+        "duration": "52:20",
+        "likeCount": 161880,
+        "favoriteCount": 195504,
+        "commentCount": 6407,
+        "viewCount": 1416246,
+        "isLiked": false,
+        "isFavorited": true,
+        "drama": {
+          "id": 2284,
+          "title": "造容世场质验市来现发",
+          "cover": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=300&fit=crop",
+          "tags": [
+            "动作",
+            "冒险"
+          ],
+          "category": "modern",
+          "isNew": true,
+          "isPopular": false,
+          "director": "汤娜",
+          "actors": [
+            {
+              "name": "冯强",
+              "role": "配角",
+              "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop"
+            },
+            {
+              "name": "段秀英",
+              "role": "配角",
+              "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop"
+            }
+          ]
+        },
+        "featuredReason": "经典回顾",
+        "featuredDate": "1994-01-19",
+        "hotScore": 88,
+        "episodeTags": [
+          "精彩",
+          "高能",
+          "催泪"
+        ],
+        "releaseDate": "1979-09-25",
+        "addToFeaturedTime": "2010-06-19",
+        "comprehensiveScore": 100,
+        "progress": 27,
+        "lastWatchTime": "1976-12-08",
+        "recommendScore": 82,
+        "freshness": 71,
+        "cover": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=225&fit=crop",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "rank": 2
+      },
+      {
+        "episode": 16,
+        "title": "第42集 装对习条",
+        "dramaTitle": "今里算通存族受",
+        "description": "根条政边前那高金最增车新至效回交全。而何品其构采习高并江标亲建文土照红有。何广行反思张元场车团难发单红空。",
+        "duration": "47:35",
+        "likeCount": 165665,
+        "favoriteCount": 62283,
+        "commentCount": 21923,
+        "viewCount": 1029268,
+        "isLiked": false,
+        "isFavorited": true,
+        "drama": {
+          "id": 2398,
+          "title": "今里算通存族受",
+          "cover": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=300&fit=crop",
+          "tags": [
+            "动作",
+            "冒险"
+          ],
+          "category": "workplace",
+          "isNew": true,
+          "isPopular": true,
+          "director": "苏静",
+          "actors": [
+            {
+              "name": "金强",
+              "role": "配角",
+              "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=50&h=50&fit=crop"
+            },
+            {
+              "name": "卢明",
+              "role": "配角",
+              "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop"
+            }
+          ]
+        },
+        "featuredReason": "新剧力推",
+        "featuredDate": "2011-02-03",
+        "hotScore": 90,
+        "episodeTags": [
+          "精彩",
+          "高能",
+          "催泪"
+        ],
+        "releaseDate": "1974-12-16",
+        "comprehensiveScore": 100,
+        "progress": 40,
+        "lastWatchTime": "2014-01-01",
+        "recommendScore": 82,
+        "freshness": 83,
+        "cover": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=225&fit=crop",
+        "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+        "rank": 3
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 10,
+      "total": 150,
+      "totalPages": 15,
+      "hasMore": true
+    }
+  }
+}

@@ -2,9 +2,13 @@ package com.lfy.kcat.content.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lfy.kcat.content.domain.DramaTags;
+import com.lfy.kcat.content.domain.Tags;
 import com.lfy.kcat.content.service.DramaTagsService;
 import com.lfy.kcat.content.mapper.DramaTagsMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author 廖成杰
@@ -14,7 +18,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DramaTagsServiceImpl extends ServiceImpl<DramaTagsMapper, DramaTags>
     implements DramaTagsService{
+    @Autowired
+    private DramaTagsMapper dramaTagsMapper;
 
+    @Override
+    public List<Tags> getDramaTagsByDramaId(Long dramaId) {
+        return dramaTagsMapper.getDramaTagsByDramaId(dramaId);
+    }
 }
 
 

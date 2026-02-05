@@ -19,4 +19,9 @@
         id,drama_id,category_id,is_primary,create_by,update_by,
         create_dept,create_time
     </sql>
+    <select id="getDramaCategoriesInfo" resultType="com.lfy.kcat.content.domain.Categories">
+        SELECT c.*  FROM drama_categories dc
+                             LEFT JOIN categories c on dc.category_id=c.category_id
+        where drama_id=#{dramaId}
+    </select>
 </mapper>

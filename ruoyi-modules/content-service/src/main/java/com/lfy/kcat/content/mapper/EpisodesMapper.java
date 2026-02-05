@@ -2,6 +2,7 @@ package com.lfy.kcat.content.mapper;
 
 import com.lfy.kcat.content.domain.Episodes;
 import com.lfy.kcat.content.domain.vo.EpisodesVo;
+import feign.Param;
 import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
 
 /**
@@ -12,4 +13,5 @@ import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
  */
 public interface EpisodesMapper extends BaseMapperPlus<Episodes, EpisodesVo> {
 
+    Episodes getDramaInfoFlowsEpisode(@Param("dramaId") Long dramaId);
 }

@@ -1,10 +1,14 @@
 package com.lfy.kcat.content.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lfy.kcat.content.domain.Categories;
 import com.lfy.kcat.content.domain.DramaCategories;
 import com.lfy.kcat.content.service.DramaCategoriesService;
 import com.lfy.kcat.content.mapper.DramaCategoriesMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author 廖成杰
@@ -15,6 +19,12 @@ import org.springframework.stereotype.Service;
 public class DramaCategoriesServiceImpl extends ServiceImpl<DramaCategoriesMapper, DramaCategories>
     implements DramaCategoriesService{
 
+    @Autowired
+    private DramaCategoriesMapper dramaCategoriesMapper;
+    @Override
+    public List<Categories> getDramaCategoriesInfo(Long dramaId) {
+        return dramaCategoriesMapper.getDramaCategoriesInfo(dramaId);
+    }
 }
 
 

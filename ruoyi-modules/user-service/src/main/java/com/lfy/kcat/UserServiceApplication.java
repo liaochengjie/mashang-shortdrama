@@ -5,9 +5,11 @@ import org.dromara.common.satoken.config.SaTokenConfiguration;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
+@EnableFeignClients
 @MapperScan(basePackages = "com.lfy.kcat.user.mapper")
 @SpringBootApplication(exclude = {SaTokenConfiguration.class,
     MybatisPlusConfiguration.class})

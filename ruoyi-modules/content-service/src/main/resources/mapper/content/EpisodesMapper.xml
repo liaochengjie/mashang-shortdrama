@@ -4,4 +4,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lfy.kcat.content.mapper.EpisodesMapper">
 
+    <select id="getDramaInfoFlowsEpisode" resultType="com.lfy.kcat.content.domain.Episodes">
+        SELECT * FROM(
+                         SELECT * from episodes
+                         where drama_id=#{dramaId} and is_trailer=1
+                         UNION
+                         SELECT * FROM episodes e
+                         where drama_id=#{dramaId} and episode_number=1) a LIMIT 1
+    </select>
 </mapper>

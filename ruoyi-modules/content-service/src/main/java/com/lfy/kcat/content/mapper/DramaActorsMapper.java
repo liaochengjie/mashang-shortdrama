@@ -1,7 +1,11 @@
 package com.lfy.kcat.content.mapper;
 
+import com.lfy.kcat.content.domain.ActorRoleInfoEntity;
 import com.lfy.kcat.content.domain.DramaActors;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import feign.Param;
+
+import java.util.List;
 
 /**
 * @author 廖成杰
@@ -11,6 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface DramaActorsMapper extends BaseMapper<DramaActors> {
 
+    List<ActorRoleInfoEntity> getDramaActorsInfo(@Param("dramaId") Long dramaId);
 }
 
 

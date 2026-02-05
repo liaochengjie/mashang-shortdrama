@@ -1,7 +1,10 @@
 package com.lfy.kcat.content.service;
 
+import com.lfy.kcat.content.domain.ActorRoleInfoEntity;
 import com.lfy.kcat.content.domain.DramaActors;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
 * @author 廖成杰
@@ -10,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface DramaActorsService extends IService<DramaActors> {
 
+    List<ActorRoleInfoEntity> getDramaActorsInfo(Long dramaId);
 }

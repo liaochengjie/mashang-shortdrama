@@ -1,7 +1,11 @@
 package com.lfy.kcat.content.mapper;
 
+import com.lfy.kcat.content.domain.Categories;
 import com.lfy.kcat.content.domain.DramaCategories;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import feign.Param;
+
+import java.util.List;
 
 /**
 * @author 廖成杰
@@ -11,6 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface DramaCategoriesMapper extends BaseMapper<DramaCategories> {
 
+    List<Categories> getDramaCategoriesInfo(@Param("dramaId") Long dramaId);
 }
 
 

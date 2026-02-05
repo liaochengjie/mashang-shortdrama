@@ -73,3 +73,11 @@ sms:
   method: Post
   appcode: 93b7e19861a24c519a7548b17dc16d75
 
+
+app:
+  executor:
+    corePoolSize: 10
+    maxPoolSize: 20
+    keepAliveSeconds: 60
+    queueCapacity: 500
+
