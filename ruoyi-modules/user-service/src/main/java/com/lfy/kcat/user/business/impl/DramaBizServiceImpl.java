@@ -26,35 +26,41 @@ public class DramaBizServiceImpl implements DramaBizService {
     public HomeFeaturedDTO getHomeFeature(PageReqDTO pageReqDTO) {
         log.info("正在远程调用获取首页精选视频数据:{}",pageReqDTO);
         R<HomeFeaturedDTO> r = contentServiceFeignClient.featured(pageReqDTO);
-        if (r.getCode()==200) {
-            return r.getData();
-        }
-        log.info("远程调用首页精品视频数据返回异常");
-        FeignEnum error = FeignEnum.SERVICE_DATA_ERROR;
-        throw new ServiceException(error.getMsg(), error.getCode());
+        //使用统一的拦截器响应，无需判断了
+        return r.getData();
+//        if(r.getCode()==200){
+//            return r.getData();
+//        }
+//        log.info("远程调用短剧ID为{}的所有剧集数据返回异常",dramaId);
+//        FeignEnum error = FeignEnum.SERVICE_DATA_ERROR;
+//        throw new ServiceException(error.getMsg(), error.getCode());
     }
 
     @Override
     public HomeDramaEpisodesDTO getDramaEpisodes(Long dramaId) {
         log.info("正在远程调用获取短剧ID为{}的所有剧集",dramaId);
         R<HomeDramaEpisodesDTO> r = contentServiceFeignClient.dramaEpisodes(dramaId);
-        if(r.getCode()==200){
-            return r.getData();
-        }
-        log.info("远程调用短剧ID为{}的所有剧集数据返回异常",dramaId);
-        FeignEnum error = FeignEnum.SERVICE_DATA_ERROR;
-        throw new ServiceException(error.getMsg(), error.getCode());
+        //使用统一的拦截器响应，无需判断了
+        return r.getData();
+//        if(r.getCode()==200){
+//            return r.getData();
+//        }
+//        log.info("远程调用短剧ID为{}的所有剧集数据返回异常",dramaId);
+//        FeignEnum error = FeignEnum.SERVICE_DATA_ERROR;
+//        throw new ServiceException(error.getMsg(), error.getCode());
     }
 
     @Override
     public HomeDramaInfoDTO getDramaInfo(Long dramaId) {
         log.info("远程调用获取短剧ID为：{}的详情信息",dramaId);
         R<HomeDramaInfoDTO> r = contentServiceFeignClient.dramaInfo(dramaId);
-        if(r.getCode()==200){
-            return r.getData();
-        }
-        log.info("远程调用短剧ID为：{}的详情信心数据返回异常",dramaId);
-        FeignEnum error = FeignEnum.SERVICE_DATA_ERROR;
-        throw new ServiceException(error.getMsg(), error.getCode());
+        //使用统一的拦截器响应，无需判断了
+        return r.getData();
+//        if(r.getCode()==200){
+//            return r.getData();
+//        }
+//        log.info("远程调用短剧ID为{}的所有剧集数据返回异常",dramaId);
+//        FeignEnum error = FeignEnum.SERVICE_DATA_ERROR;
+//        throw new ServiceException(error.getMsg(), error.getCode());
     }
 }

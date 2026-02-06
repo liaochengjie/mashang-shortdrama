@@ -81,3 +81,12 @@ app:
     keepAliveSeconds: 60
     queueCapacity: 500
 
+---
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
