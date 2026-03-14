@@ -1,9 +1,9 @@
 package com.lfy.kcat.user.feign;
 
 import org.dromara.common.core.domain.R;
-import org.dromara.common.core.dto.HomeDramaEpisodesDTO;
-import org.dromara.common.core.dto.HomeDramaInfoDTO;
-import org.dromara.common.core.dto.HomeFeaturedDTO;
+import org.dromara.common.core.dto.home.HomeDramaEpisodesDTO;
+import org.dromara.common.core.dto.home.HomeDramaInfoDTO;
+import org.dromara.common.core.dto.home.HomeFeaturedDTO;
 import org.dromara.common.core.dto.PageReqDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

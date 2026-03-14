@@ -1,18 +1,20 @@
 package com.lfy.kcat.user.controller;
 
-import com.github.jsonzou.jmockdata.JMockData;
 import com.lfy.kcat.user.business.DramaBizService;
-import com.lfy.kcat.user.vo.PageReqVo;
 import org.dromara.common.core.domain.R;
-import org.dromara.common.core.dto.HomeDramaEpisodesDTO;
-import org.dromara.common.core.dto.HomeDramaInfoDTO;
-import org.dromara.common.core.dto.HomeFeaturedDTO;
+import org.dromara.common.core.dto.home.HomeDramaEpisodesDTO;
+import org.dromara.common.core.dto.home.HomeDramaInfoDTO;
+import org.dromara.common.core.dto.home.HomeFeaturedDTO;
 import org.dromara.common.core.dto.PageReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -20,10 +22,19 @@ public class AppHomeController {
 
     @Autowired
     DramaBizService dramaBizService;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
     @GetMapping("/episodes/featured")
     public R featured(PageReqDTO pageReqDTO){
 
         HomeFeaturedDTO homeFeaturedDTO=dramaBizService.getHomeFeature(pageReqDTO);
+        homeFeaturedDTO.getEpisodes().stream().forEach(episodesDTO -> {
+            //通过dramaBizService来查询是否点赞过
+            Boolean isLiked = dramaBizService.getUserIsLike(episodesDTO.getEpisode());
+            episodesDTO.setIsLiked(isLiked);
+        });
+
         //模拟数据
 //        HomeFeaturedDTO mock = JMockData.mock(HomeFeaturedDTO.class);
 //        mock.getEpisodes().forEach(episode->{

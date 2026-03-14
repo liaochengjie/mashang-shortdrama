@@ -4,27 +4,23 @@ import com.alibaba.fastjson2.util.DateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.lfy.kcat.content.mapper.DramaActorsMapper;
-import org.dromara.common.core.dto.HomeDramaEpisodesDTO.DramaInfoDTO;
-import org.dromara.common.core.dto.HomeDramaEpisodesDTO.StatisticsDTO;
+import org.dromara.common.core.dto.home.HomeDramaEpisodesDTO.StatisticsDTO;
 
-import java.util.Date;
-
-import com.google.common.collect.Lists;
 import com.lfy.kcat.content.domain.*;
 import com.lfy.kcat.content.domain.bo.DramasBo;
 import com.lfy.kcat.content.mapper.EpisodesMapper;
 import com.lfy.kcat.content.service.DramaActorsService;
 import com.lfy.kcat.content.service.DramaCategoriesService;
 import com.lfy.kcat.content.service.DramaTagsService;
-import org.dromara.common.core.dto.HomeDramaEpisodesDTO;
-import org.dromara.common.core.dto.HomeDramaInfoDTO;
-import org.dromara.common.core.dto.HomeFeaturedDTO.EpisodesDTO.DramaDTO;
+import org.dromara.common.core.dto.home.HomeDramaEpisodesDTO;
+import org.dromara.common.core.dto.home.HomeDramaInfoDTO;
+import org.dromara.common.core.dto.home.HomeFeaturedDTO.EpisodesDTO.DramaDTO;
 
 import com.lfy.kcat.content.biz.DramaHomeService;
 import com.lfy.kcat.content.domain.vo.DramasVo;
 import com.lfy.kcat.content.service.IDramasService;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.common.core.dto.HomeFeaturedDTO;
+import org.dromara.common.core.dto.home.HomeFeaturedDTO;
 import org.dromara.common.core.dto.PageReqDTO;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
@@ -32,9 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-import static kotlin.reflect.jvm.internal.impl.builtins.StandardNames.FqNames.list;
 
 @Service
 @Slf4j

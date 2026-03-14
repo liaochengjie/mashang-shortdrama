@@ -1,6 +1,9 @@
 package com.lfy.kcat.user.config;
 
+import com.lfy.kcat.user.template.BloomFilterTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -11,6 +14,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
+@Slf4j
 public class AppConfig {
     @Value("${app.executor.corePoolSize}")
     private int corePoolSize;
@@ -32,6 +36,14 @@ public class AppConfig {
             new ArrayBlockingQueue<>(queueCapacity),
             new ThreadPoolExecutor.CallerRunsPolicy());
         return executor;
+    }
+
+    @Bean
+    ApplicationRunner applicationRunner(BloomFilterTemplate bloomFilterTemplate){
+        return (args -> {
+            log.info("项目初始化完成，准备初始化bf......");
+            bloomFilterTemplate.initBloomFilter();
+        });
     }
 
 }

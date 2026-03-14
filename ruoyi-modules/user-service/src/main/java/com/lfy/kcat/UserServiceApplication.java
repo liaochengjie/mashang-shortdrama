@@ -12,7 +12,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableFeignClients
 @MapperScan(basePackages = "com.lfy.kcat.user.mapper")
 @SpringBootApplication(exclude = {SaTokenConfiguration.class,
-    MybatisPlusConfiguration.class})
+        MybatisPlusConfiguration.class})
+
 
 public class UserServiceApplication {
     public static void main(String[] args) {

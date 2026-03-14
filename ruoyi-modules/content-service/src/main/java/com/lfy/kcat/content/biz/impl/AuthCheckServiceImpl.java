@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.lfy.kcat.content.biz.AuthCheckService;
+import com.lfy.kcat.content.biz.BloomFilterTemplate;
 import com.lfy.kcat.content.domain.DramaAuth;
 import com.lfy.kcat.content.domain.Dramas;
 import com.lfy.kcat.content.feign.CamundaFeignClient;
@@ -39,6 +40,8 @@ public class AuthCheckServiceImpl implements AuthCheckService {
     @Autowired
     DramaAuthMapper dramaAuthMapper;
 
+    @Autowired
+    BloomFilterTemplate bloomFilterTemplate;
 
     /**
      * 用于得到AI审核状态的其中的方法（通过短剧ID获取到流程ID）
@@ -102,6 +105,9 @@ public class AuthCheckServiceImpl implements AuthCheckService {
 
         camundaFeignClient.claimManualAuthTaskAndComplete(dramaAuthManualTaskDTO);
 
+
+        //将短剧的id存入到布隆过滤器中
+        bloomFilterTemplate.addDramaIdBloomFilter(manualAuthTaskVo.getDramaId());
 
     }
 

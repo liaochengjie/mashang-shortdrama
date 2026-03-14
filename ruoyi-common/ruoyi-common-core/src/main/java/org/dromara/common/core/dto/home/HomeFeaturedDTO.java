@@ -1,4 +1,4 @@
-package org.dromara.common.core.dto;
+package org.dromara.common.core.dto.home;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +30,7 @@ public class HomeFeaturedDTO {
     @NoArgsConstructor
     @Data
     public static class EpisodesDTO {
+
         private String episode;
         private String title;
         private String dramaTitle;

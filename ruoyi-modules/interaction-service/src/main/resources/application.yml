@@ -36,4 +36,25 @@ spring:
       - optional:nacos:application-common.yml
       - optional:nacos:datasource.yml
       - optional:nacos:${spring.application.name}.yml
+---
+spring:
+  kafka:
+    listener:
+      ack-mode: manual
+    consumer:
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: interaction-service
+      auto-offset-reset: earliest
+      #消费者确认模式为手动确认
+      enable-auto-commit: false
 
+---
+spring:
+  data:
+    redis:
+      database: 1
+      host: localhost
+      port: 6379
+      password: ${SPRING_DATA_REDIS_PASSWORD}

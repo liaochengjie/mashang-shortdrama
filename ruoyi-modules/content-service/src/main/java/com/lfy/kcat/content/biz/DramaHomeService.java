@@ -1,8 +1,8 @@
 package com.lfy.kcat.content.biz;
 
-import org.dromara.common.core.dto.HomeDramaEpisodesDTO;
-import org.dromara.common.core.dto.HomeDramaInfoDTO;
-import org.dromara.common.core.dto.HomeFeaturedDTO;
+import org.dromara.common.core.dto.home.HomeDramaEpisodesDTO;
+import org.dromara.common.core.dto.home.HomeDramaInfoDTO;
+import org.dromara.common.core.dto.home.HomeFeaturedDTO;
 import org.dromara.common.core.dto.PageReqDTO;
 import org.springframework.stereotype.Service;
 

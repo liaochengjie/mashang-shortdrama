@@ -61,11 +61,11 @@
         <artifactId>ruoyi-common-idempotent</artifactId>
     </dependency>
         <!--引入单元测试-->
-     <dependency>
-         <groupId>org.springframework.boot</groupId>
-         <artifactId>spring-boot-starter-test</artifactId>
-        <scope>test</scope>
-     </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!--引入minio对象存储-->
         <dependency>
@@ -142,6 +142,14 @@
             <artifactId>xxl-job-core</artifactId>
             <version>3.2.0</version>
         </dependency>
+        <!--导入redisson的包-->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+        </dependency>
+
+
+
     </dependencies>
 
     <dependencyManagement>
