@@ -1,4 +1,4 @@
-package com.lfy.kcat.user.controller;
+package com.lfy.kcat.user.otherTestController;
 
 import com.lfy.kcat.user.template.RedisService;
 import lombok.extern.slf4j.Slf4j;

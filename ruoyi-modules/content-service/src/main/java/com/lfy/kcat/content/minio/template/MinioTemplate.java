@@ -33,14 +33,17 @@ public class MinioTemplate {
             //获取文件名
             String fileName = file.getOriginalFilename();
             //添加时间为名字前缀来导致可以通过时间排序
-            String path= DateUtils.parseDateToStr(FormatsType.YYYY_MM_DD_SLASH,new Date());
+            String timePrefix = DateUtils.parseDateToStr(FormatsType.YYYY_MM_DD_SLASH,new Date());
             //添加UUID防止重复导致覆盖
-            String objectName= path+"/"+UUID.randomUUID().toString()+"_"+fileName;
+            //文件名称的组成：路径+UUID+文件名+文件类型
+            String objectName= timePrefix+"/"+UUID.randomUUID().toString()+"_"+fileName;
             //获取文件类型
             String contentType = file.getContentType();
             //获取文件大小
             long size = file.getSize();
 
+            //判断桶是否存在
+            //这步过后，桶一定存在了
             bucketExistAndCreate(BUCKET_NAME);
 
 

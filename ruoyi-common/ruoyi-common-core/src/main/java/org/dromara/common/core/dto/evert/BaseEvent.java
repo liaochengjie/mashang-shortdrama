@@ -7,8 +7,8 @@ public class BaseEvent {
     private Long eventId;
 
     private Long userId;
-
+    //当前时间戳
     private Long currentTimeMillis;
-
+    //事件类型
     private String eventType;
 }

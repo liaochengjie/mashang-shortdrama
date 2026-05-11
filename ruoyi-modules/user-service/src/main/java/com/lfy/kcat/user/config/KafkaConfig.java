@@ -3,7 +3,6 @@ package com.lfy.kcat.user.config;
 import com.lfy.kcat.user.interceptor.KafkaUserEventProducerInterceptor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.dromara.common.core.constant.KafkaConstant;
-import org.dromara.common.core.dto.evert.BaseEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;

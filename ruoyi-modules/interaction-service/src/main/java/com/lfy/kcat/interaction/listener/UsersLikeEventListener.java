@@ -55,7 +55,7 @@ public class UsersLikeEventListener {
             usersLikeDTO.setUserId(likeEvent.getUserId());
             usersLikeDTO.setEpisodeId(likeEvent.getEpisodeId());
             usersLikeDTO.setLike(likeEvent.getAction());
-            //调用点赞接口
+            //调用点赞接口，更新用户在数据库点赞状态
             usersLikeService.likeEpisode(usersLikeDTO);
             //获取首页精彩数据缓存
             String homeFeatureCache = stringRedisTemplate.opsForValue().get("home:feature:1:15");
@@ -75,6 +75,7 @@ public class UsersLikeEventListener {
             String newHomeFeatureCache = JSONUtil.toJsonStr(homeFeaturedDTO);
             //4.更新缓存
             stringRedisTemplate.opsForValue().set("home:feature:1:15", newHomeFeatureCache);
+
             //记入布隆过滤器，防止重复消费
             kafkaBloomFilterTemplate.addEventToBloomFilter(eventId);
             //6.手动ack

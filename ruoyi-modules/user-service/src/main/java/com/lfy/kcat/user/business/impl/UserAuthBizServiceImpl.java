@@ -102,7 +102,7 @@ public class UserAuthBizServiceImpl implements UserAuthBizService {
             userInfoRespVo.setFansCount(fansCount);
         });
 
-
+        //6：查询历史数量
         CompletableFuture<Void> historyFuture = CompletableFuture.runAsync(() -> {
             LambdaQueryWrapper<UserBrowseHistory> eq2 = Wrappers.lambdaQuery(UserBrowseHistory.class)
                 .eq(UserBrowseHistory::getUserId, loginId);
@@ -112,7 +112,7 @@ public class UserAuthBizServiceImpl implements UserAuthBizService {
         });
 
 
-        //8.将收藏数量封装
+        //7.将收藏数量封装
         CompletableFuture<Void> FollowingFuture = CompletableFuture.runAsync(() -> {
             LambdaQueryWrapper<UserCollections> eq3 = Wrappers.lambdaQuery(UserCollections.class)
                 .eq(UserCollections::getUserId, loginId);

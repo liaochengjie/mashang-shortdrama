@@ -58,6 +58,7 @@ public class CacheDataAspect {
             boolean lockResult = lock.tryLock();
             if (lockResult) {
                 log.info("抢锁成功进行回源数据查询");
+                //执行原方法，获取数据
                 Object proceed = joinPoint.proceed();
                 //回源数据查询成功后，将数据保存到缓存中
                 redisService.saveData(cacheKey, proceed);
@@ -68,9 +69,11 @@ public class CacheDataAspect {
                 Thread.sleep(2000);
                 data = redisService.getData(cacheKey, returnType);
             }
-        }finally {
+        } finally {
+            if(lock.isHeldByCurrentThread()) {
                 lock.unlock();
                 log.info("解锁成功");
+            }
         }
         log.info("环绕通知结束");
         return data;

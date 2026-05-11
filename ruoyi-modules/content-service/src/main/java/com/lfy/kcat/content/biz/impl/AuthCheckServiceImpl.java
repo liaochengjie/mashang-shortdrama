@@ -85,7 +85,7 @@ public class AuthCheckServiceImpl implements AuthCheckService {
 
     @Override
     public void saveManualAuthData(ManualAuthTaskVo manualAuthTaskVo, String authorization) {
-        log.info("人工审核更新数据库中,然后讲camunda从人工审核推进到下一步ManualAuthTaskVo:{}",manualAuthTaskVo);
+        log.info("人工审核更新数据库中,然后将camunda从人工审核推进到下一步ManualAuthTaskVo:{}",manualAuthTaskVo);
         //通过令牌来获取审核人
         //3、当前登录到系统中的人是谁。
         String payLoad = authorization.split("\\.")[1];

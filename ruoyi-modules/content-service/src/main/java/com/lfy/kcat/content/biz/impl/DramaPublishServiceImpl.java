@@ -57,7 +57,7 @@ public class DramaPublishServiceImpl implements DramaPublishService {
     public Long publishDrama(DramaPublishVo dramaPublishVo) {
         //1、从Vo中解出短剧数据，保存数据库，生成短剧id
         Dramas dramasEntity = buildDramaEntity(dramaPublishVo);
-        //数据库保存完数据,mybatisplus
+        //数据库保存完短剧数据,mybatis-plus
         dramasMapper.insert(dramasEntity);
         //从Bean中直接获取自增Id
         Long dramaId = dramasEntity.getDramaId();
@@ -149,6 +149,7 @@ public class DramaPublishServiceImpl implements DramaPublishService {
     CamundaFeignClient camundaFeignClient;
     @Override
     public String startDramaAuthProcess(DramaAuthStartDTO dramaAuthStartDTO) {
+        //远程调用camundaFeignClient的startDramaAuthProcess方法，获取流程ID
         R r = camundaFeignClient.startDramaAuthProcess(dramaAuthStartDTO);
         return r.getData().toString();
     }
@@ -207,15 +208,15 @@ public class DramaPublishServiceImpl implements DramaPublishService {
         return list;
     }
 
-    private static Dramas buildDramaEntity(DramaPublishVo dramaPublishVo) {
+    private  Dramas buildDramaEntity(DramaPublishVo dramaPublishVo) {
         DramasBo dramasBo = dramaPublishVo.getDrama();
-        Dramas dramasEntity=new Dramas();
-        BeanUtils.copyProperties(dramasBo,dramasEntity);
-        dramasEntity.setFollowCount(0L);
-        dramasEntity.setLikeCount(0L);
-        dramasEntity.setPlayCount(0L);
-        dramasEntity.setCreateTime(new Date());
-        dramasEntity.setUpdateTime(new Date());
-        return dramasEntity;
+        Dramas dramas=new Dramas();
+        BeanUtils.copyProperties(dramasBo,dramas);
+        dramas.setFollowCount(0L);
+        dramas.setLikeCount(0L);
+        dramas.setPlayCount(0L);
+        dramas.setCreateTime(new Date());
+        dramas.setUpdateTime(new Date());
+        return dramas;
     }
 }

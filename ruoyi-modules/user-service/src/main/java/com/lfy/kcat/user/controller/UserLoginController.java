@@ -33,6 +33,10 @@ public class UserLoginController {
         return R.ok("登录成功",loginRespVo);
     }
 
+    /**
+     * 获取用户信息
+     * @return
+     */
     @GetMapping("/userinfo")
     public R userInfo(){
         //前端自己带令牌放到请求头中，SaToken 只需要从 Authorization 头字段中拿到令牌

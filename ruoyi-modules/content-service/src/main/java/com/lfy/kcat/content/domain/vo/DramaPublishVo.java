@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 public class DramaPublishVo {
     private DramasBo drama;
+    //分类id列表
     private List<Long> categories;
     private List<Long> tags;
     private List<PublishActorsVo> actors;

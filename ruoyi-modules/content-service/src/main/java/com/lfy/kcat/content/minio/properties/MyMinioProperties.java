@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "my-minio")
 @Data
 public class MyMinioProperties {
+    //访问地址
     private String endpoint;
     private String accessKey;
+
     private  String secretKey;
 }

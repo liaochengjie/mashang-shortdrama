@@ -25,6 +25,12 @@ public class AppHomeController {
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+
+    /**
+     * 获取首页精选数据
+     * @param pageReqDTO
+     * @return
+     */
     @GetMapping("/episodes/featured")
     public R featured(PageReqDTO pageReqDTO){
 
@@ -43,12 +49,22 @@ public class AppHomeController {
         return R.ok(homeFeaturedDTO);
     }
 
+    /**
+     * 获取剧集详情数据
+     * @param dramaId
+     * @return
+     */
     @GetMapping("/dramas/{dramaId}/episodes/all")
     public R dramaEpisodes(@PathVariable("dramaId") Long dramaId){
         HomeDramaEpisodesDTO homeDramaEpisodesDTO=dramaBizService.getDramaEpisodes(dramaId);
         return R.ok(homeDramaEpisodesDTO);
     }
 
+    /**
+     * 获取剧集详情数据
+     * @param dramaId
+     * @return
+     */
     @GetMapping("/dramas/{dramaId}")
     public R dramaInfo(@PathVariable("dramaId") Long dramaId){
         HomeDramaInfoDTO homeDramaInfoDTO = dramaBizService.getDramaInfo(dramaId);

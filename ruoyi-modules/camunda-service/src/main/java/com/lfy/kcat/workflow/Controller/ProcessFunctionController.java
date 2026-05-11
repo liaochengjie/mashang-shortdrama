@@ -16,6 +16,10 @@ public class ProcessFunctionController {
     @Autowired
     RuntimeService runtimeService;
 
+    /**
+     *
+     * @return
+     */
     @RequestMapping("/vation/process/start")
     public List<String> getByKey(){
         ProcessInstance vocationRequest = runtimeService.startProcessInstanceByKey("vocationRequest");

@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class VerifyCodeBizServiceImpl implements VerifyCodeBizService {
 
     @Autowired
-    StringRedisTemplate redisTemplate;
+    StringRedisTemplate stringRedisRedisTemplate;
 
     @Autowired
     SmsTemplate smsTemplate;
@@ -33,7 +33,7 @@ public class VerifyCodeBizServiceImpl implements VerifyCodeBizService {
         smsTemplate.sendSmsCode(phone,code);
 
         //2：将电话号码喝短信数据存入redis入库
-        redisTemplate.opsForValue().set(
+        stringRedisRedisTemplate.opsForValue().set(
             RedisConst.POHNE_CODE_KEY+phone,
             code,
             BizConst.DEFAULT_CODE_EXPIRES,
@@ -51,7 +51,7 @@ public class VerifyCodeBizServiceImpl implements VerifyCodeBizService {
      */
     @Override
     public boolean codeAuth(String phone, String code) {
-        String redisCode = redisTemplate.opsForValue().get(RedisConst.POHNE_CODE_KEY + phone);
+        String redisCode = stringRedisRedisTemplate.opsForValue().get(RedisConst.POHNE_CODE_KEY + phone);
         boolean equals = code.equals(redisCode);
         return equals;
     }

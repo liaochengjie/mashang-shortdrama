@@ -45,6 +45,10 @@ public class CamundaJavaDelegateHandler {
         return dramaAuthCompleteDTO;
     }
 
+    /**
+     * AI审核
+     * @param execution
+     */
     public void aiCheck(DelegateExecution execution) {
         Map<String, Object> variables = execution.getVariables();
         Object dramaId = variables.get("dramaId");
@@ -69,6 +73,12 @@ public class CamundaJavaDelegateHandler {
     }
 
 
+    /**
+     * 已经不用了
+     * 机器审核，模拟机器审核需要1分钟
+     * @param execution
+     * @throws InterruptedException
+     */
 
     public void audiService(DelegateExecution execution) throws InterruptedException {
         System.out.println("audiService 机器自动审核");

@@ -1,7 +1,6 @@
 package com.lfy.kcat.user.interceptor;
 
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerInterceptor;
@@ -19,6 +18,7 @@ public class KafkaUserEventProducerInterceptor implements ProducerInterceptor<St
     public ProducerRecord<String, Object> onSend(ProducerRecord<String, Object> producerRecord) {
         log.info("kafka拦截器, 发送消息: {}", producerRecord);
         Object value = producerRecord.value();
+        Object producerRecordResult=null;
         if(value instanceof BaseEvent){
             BaseEvent baseEvent = (BaseEvent) value;
             //雪花算法
@@ -26,16 +26,18 @@ public class KafkaUserEventProducerInterceptor implements ProducerInterceptor<St
             baseEvent.setEventId(snowflakeNextId);
             boolean login = StpUtil.isLogin();
             if(login) {
-                Long loginId = Long.parseLong(StpUtil.getLoginId().toString());
-                baseEvent.setUserId(Long.parseLong(loginId.toString()));
+//                Long loginId = Long.parseLong(StpUtil.getLoginId().toString());
+                long loginId = StpUtil.getLoginIdAsLong();
+                baseEvent.setUserId(loginId);
             }else{
-                log.info("未登录用户设置统一的userId");
+                log.info("未登录用户设置统一的userId为0");
                 baseEvent.setUserId(0L);
             }
             baseEvent.setCurrentTimeMillis(System.currentTimeMillis());
+            producerRecordResult=baseEvent;
         }
-
-        return producerRecord;
+        ProducerRecord<String, Object> result = new ProducerRecord<>(producerRecord.topic(), producerRecord.partition(), producerRecord.key(), producerRecordResult);
+        return result;
     }
 
     @Override

@@ -22,12 +22,17 @@ public class VerifyCodeController {
     @Autowired
     VerifyCodeBizService verifyCodeBizService;
 
+    /**
+     * 发送验证码
+     * @param sendCodeReqVo
+     * @return
+     */
     @PostMapping("/send-code")
     public R sendCode(@RequestBody SendCodeReqVo sendCodeReqVo){
 
         verifyCodeBizService.sendCode(sendCodeReqVo.getPhone());
         SendCodeRespVo sendCodeRespVo = new SendCodeRespVo();
-        sendCodeRespVo.setPhone(sendCodeRespVo.getPhone());
+        sendCodeRespVo.setPhone(sendCodeReqVo.getPhone());
         sendCodeRespVo.setExpires(BizConst.DEFAULT_CODE_EXPIRES);
         log.info("短信发送成功");
         return R.ok("短信发送成功",sendCodeRespVo);

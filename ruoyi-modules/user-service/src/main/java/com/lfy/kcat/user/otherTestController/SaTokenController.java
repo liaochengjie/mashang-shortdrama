@@ -1,4 +1,4 @@
-package com.lfy.kcat.user.controller;
+package com.lfy.kcat.user.otherTestController;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
