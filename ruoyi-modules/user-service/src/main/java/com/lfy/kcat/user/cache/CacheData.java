@@ -11,6 +11,7 @@ import java.lang.annotation.*;
 @Documented
 @Reflective
 public @interface CacheData {
+    //
     String cacheKey() default "";
 
     String bloomFilterName() default "";

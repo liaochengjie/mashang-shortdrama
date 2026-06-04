@@ -22,6 +22,7 @@ public class CacheDataAspect {
     @Autowired
     RedisService redisService;
 
+
     @Autowired
     RedissonClient redissonClient;
     @Around("@annotation(com.lfy.kcat.user.cache.CacheData)")
@@ -55,6 +56,7 @@ public class CacheDataAspect {
         String lockName="lock:"+cacheKey;
         RLock lock = redissonClient.getLock(lockName);
         try {
+
             boolean lockResult = lock.tryLock();
             if (lockResult) {
                 log.info("抢锁成功进行回源数据查询");
