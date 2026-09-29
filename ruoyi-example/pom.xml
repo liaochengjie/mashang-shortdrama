@@ -11,11 +11,11 @@
     <modules>
         <module>ruoyi-demo</module>
         <module>ruoyi-test-mq</module>
-        <module>demo-mcp-servier</module>
-        <module>demo-mcp-client</module>
-        <module>demo-sa-token</module>
-        <module>demo-xxl-job</module>
-        <module>demo-kafka</module>
+<!--        <module>demo-mcp-servier</module>-->
+<!--        <module>demo-mcp-client</module>-->
+<!--        <module>demo-sa-token</module>-->
+<!--        <module>demo-xxl-job</module>-->
+<!--        <module>demo-kafka</module>-->
     </modules>
 
     <artifactId>ruoyi-example</artifactId>
