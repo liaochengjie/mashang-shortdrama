@@ -1,5 +1,7 @@
 package com.lfy.kcat.content.biz.impl;
 
+import com.lfy.kcat.content.biz.RagReleaseService;
+
 import cn.dev33.satoken.secure.SaBase64Util;
 import cn.hutool.core.codec.Base64;
 import com.alibaba.fastjson.JSON;
@@ -25,9 +27,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * @author liaochengjie
+ */
 @Service
 @Slf4j
 public class AuthCheckServiceImpl implements AuthCheckService {
+    @Autowired
+    private RagReleaseService ragReleaseService;
+    @Autowired
+    private org.springframework.jdbc.core.JdbcTemplate ragJdbc;
 
     @Autowired
     DramaAuthService dramaAuthService;
@@ -50,6 +59,9 @@ public class AuthCheckServiceImpl implements AuthCheckService {
      */
     @Override
     public String getProcessIdByDramaId(String dramaId) {
+        if (ragReleaseService.enabled()) {
+            return ragJdbc.queryForObject("SELECT s.process_id FROM kcat_rag_snapshot s JOIN kcat_rag_release r ON r.drama_id=s.drama_id AND r.source_version=s.source_version WHERE s.drama_id=?", String.class, dramaId);
+        }
         DramaAuth dramaAuth = dramaAuthService.getOne(Wrappers.lambdaQuery(DramaAuth.class).eq(DramaAuth::getDramaId, dramaId));
         return dramaAuth.getProcessId();
     }
@@ -85,6 +97,15 @@ public class AuthCheckServiceImpl implements AuthCheckService {
 
     @Override
     public void saveManualAuthData(ManualAuthTaskVo manualAuthTaskVo, String authorization) {
+        if (ragReleaseService.enabled()) {
+            if (manualAuthTaskVo.getSnapshotId() == null || manualAuthTaskVo.getProcessId() == null)
+                throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT, "SNAPSHOT_AND_PROCESS_REQUIRED");
+            Map<String,Object> snapshot = ragReleaseService.current(manualAuthTaskVo.getSnapshotId(), false);
+            if (!snapshot.get("drama_id").toString().equals(manualAuthTaskVo.getDramaId().toString()) || !java.util.Objects.equals(snapshot.get("process_id"),manualAuthTaskVo.getProcessId()))
+                throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT, "APPROVAL_VERSION_CONFLICT");
+            ragReleaseService.decision(manualAuthTaskVo.getSnapshotId(), "1".equals(manualAuthTaskVo.getAuditStatus()), manualAuthTaskVo.getAuditReason(), org.dromara.common.satoken.utils.LoginHelper.getUsername());
+            return;
+        }
         log.info("人工审核更新数据库中,然后将camunda从人工审核推进到下一步ManualAuthTaskVo:{}",manualAuthTaskVo);
         //通过令牌来获取审核人
         //3、当前登录到系统中的人是谁。
@@ -113,6 +134,8 @@ public class AuthCheckServiceImpl implements AuthCheckService {
 
     @Override
     public void completeAuthUpdateDb(DramaAuthCompleteDTO dramaAuthCompleteDTO) {
+        if (ragReleaseService.enabled() && ragJdbc.queryForObject("SELECT COUNT(*) FROM kcat_rag_release WHERE drama_id=?", Long.class, dramaAuthCompleteDTO.getDramaId()) > 0)
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT, "LEGACY_PROCESS_REQUIRES_MANUAL_MAPPING");
         log.info("短剧数据库信息修改:{}",dramaAuthCompleteDTO);
         //将数据保存进数据库
         LambdaUpdateWrapper<Dramas> eq = Wrappers.lambdaUpdate(Dramas.class)

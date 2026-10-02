@@ -1,1 +1,1 @@
-"""Application configuration."""
+"""Kcat AI service."""

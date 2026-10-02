@@ -1,1 +1,1 @@
-"""HTTP routes: validate input and delegate business logic to services."""
+"""Kcat AI service."""

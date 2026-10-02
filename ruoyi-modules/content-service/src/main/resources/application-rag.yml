@@ -1,0 +1,17 @@
+rag:
+  enabled: ${RAG_ENABLED:false}
+  internal-token: ${RAG_INTERNAL_TOKEN:}
+  camunda-token: ${CAMUNDA_INTERNAL_TOKEN:}
+  camunda-url: ${CAMUNDA_SERVICE_URL:http://127.0.0.1:8088}
+  embedding-profile: ${RAG_EMBEDDING_PROFILE:}
+  pipeline-version: ${RAG_PIPELINE_VERSION:evidence-v1}
+  media-allowed-hosts: ${RAG_MEDIA_ALLOWED_HOSTS:localhost,127.0.0.1,minio}
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 4
+
+server:
+  error:
+    include-message: always

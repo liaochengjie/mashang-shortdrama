@@ -1,4 +1,6 @@
 package com.lfy.kcat.content.biz.impl;
+
+import com.lfy.kcat.content.biz.RagReleaseService;
 import com.google.common.collect.Maps;
 
 import com.lfy.kcat.content.biz.DramaPublishService;
@@ -24,12 +26,14 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author 廖成杰
+ * @author liaochengjie
  * @date 2025/11/4
  */
 @Service
 @Slf4j
 public class DramaPublishServiceImpl implements DramaPublishService {
+    @Autowired
+    private RagReleaseService ragReleaseService;
     @Autowired
     DramasMapper dramasMapper;
 
@@ -122,6 +126,11 @@ public class DramaPublishServiceImpl implements DramaPublishService {
             iEpisodesService.insertByBo(episode);
         }
         log.info("保存短剧成功");
+
+        if (ragReleaseService.enabled()) {
+            ragReleaseService.capture(dramaId);
+            return dramaId;
+        }
 
         //开启AI审核流程，调用startDramaAuthProcess
         DramaAuthStartDTO dramaAuthStartDTO = new DramaAuthStartDTO();

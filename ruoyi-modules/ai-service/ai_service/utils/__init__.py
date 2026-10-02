@@ -1,1 +1,1 @@
-"""Reusable helpers independent of business workflows."""
+"""Kcat AI service."""

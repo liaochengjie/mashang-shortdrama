@@ -1,5 +1,7 @@
 package com.lfy.kcat.content.service.impl;
 
+import com.lfy.kcat.content.biz.RagReleaseService;
+
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
@@ -23,7 +25,7 @@ import java.util.Collection;
 /**
  * 剧集管理Service业务层处理
  *
- * @author leifengyang
+ * @author liaochengjie
  * @date 2025-10-28
  */
 @Slf4j
@@ -32,6 +34,7 @@ import java.util.Collection;
 public class EpisodesServiceImpl implements IEpisodesService {
 
     private final EpisodesMapper baseMapper;
+    private final RagReleaseService ragRelease;
 
     /**
      * 查询剧集管理
@@ -106,12 +109,14 @@ public class EpisodesServiceImpl implements IEpisodesService {
      * @return 是否新增成功
      */
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public Boolean insertByBo(EpisodesBo bo) {
         Episodes add = MapstructUtils.convert(bo, Episodes.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setEpisodeId(add.getEpisodeId());
+            ragRelease.refreshIfManaged(add.getDramaId());
         }
         return flag;
     }
@@ -123,10 +128,23 @@ public class EpisodesServiceImpl implements IEpisodesService {
      * @return 是否修改成功
      */
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public Boolean updateByBo(EpisodesBo bo) {
         Episodes update = MapstructUtils.convert(bo, Episodes.class);
         validEntityBeforeSave(update);
-        return baseMapper.updateById(update) > 0;
+        Episodes prior = baseMapper.selectById(bo.getEpisodeId());
+        boolean changed = baseMapper.updateById(update) > 0;
+        if (changed && prior != null && ragRelease.enabled()) {
+            Episodes current = baseMapper.selectById(bo.getEpisodeId());
+            if (!java.util.Objects.equals(prior.getVideoUrl(), current.getVideoUrl()) || !java.util.Objects.equals(prior.getSubtitleUrl(), current.getSubtitleUrl()) ||
+                !java.util.Objects.equals(prior.getDescription(), current.getDescription()) || !java.util.Objects.equals(prior.getTitle(), current.getTitle()) ||
+                !java.util.Objects.equals(prior.getEpisodeNumber(), current.getEpisodeNumber()) || !java.util.Objects.equals(prior.getCover(), current.getCover()) ||
+                !java.util.Objects.equals(prior.getDuration(), current.getDuration()) || !java.util.Objects.equals(prior.getDramaId(),current.getDramaId())) {
+                ragRelease.refreshIfManaged(prior.getDramaId());
+                if (!java.util.Objects.equals(prior.getDramaId(),current.getDramaId())) ragRelease.refreshIfManaged(current.getDramaId());
+            }
+        }
+        return changed;
     }
 
     /**
@@ -144,10 +162,15 @@ public class EpisodesServiceImpl implements IEpisodesService {
      * @return 是否删除成功
      */
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
-        return baseMapper.deleteByIds(ids) > 0;
+        List<Long> dramas=baseMapper.selectByIds(ids).stream().map(Episodes::getDramaId).distinct().sorted().toList();
+        boolean changed=baseMapper.deleteByIds(ids)>0;
+        if (changed) for (Long id:dramas) ragRelease.refreshIfManaged(id);
+        // Removing the last required episode is rejected by capture and rolls back this transaction.
+        return changed;
     }
 }

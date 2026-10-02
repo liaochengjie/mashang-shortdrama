@@ -1,0 +1,8 @@
+rag:
+  enabled: ${RAG_ENABLED:false}
+  internal-token: ${RAG_INTERNAL_TOKEN:}
+  python-url: ${RAG_PYTHON_URL:http://127.0.0.1:7777}
+  content-url: ${CONTENT_SERVICE_URL:http://127.0.0.1:10001}
+server:
+  error:
+    include-message: always

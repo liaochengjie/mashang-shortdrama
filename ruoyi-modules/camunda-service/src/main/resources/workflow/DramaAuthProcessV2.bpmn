@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" targetNamespace="https://kcat.local/workflow">
+  <bpmn:error id="SupersededError" errorCode="SUPERSEDED"/>
+  <bpmn:process id="DramaAuthProcessV2" name="版本化短剧审核与发布" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="Start"/>
+    <bpmn:sequenceFlow id="f0" sourceRef="Start" targetRef="Publication"/>
+    <bpmn:subProcess id="Publication">
+      <bpmn:startEvent id="InnerStart"/>
+      <bpmn:serviceTask id="AiReview" camunda:delegateExpression="${aiCheck}" camunda:asyncBefore="true"><bpmn:extensionElements><camunda:failedJobRetryTimeCycle>R3/PT10S</camunda:failedJobRetryTimeCycle></bpmn:extensionElements></bpmn:serviceTask>
+      <bpmn:userTask id="HumanReview" name="人工审核固定快照"/>
+      <bpmn:exclusiveGateway id="Decision" default="reject"/>
+      <bpmn:parallelGateway id="Split"/>
+      <bpmn:serviceTask id="StartMedia" name="提交版本化转码" camunda:delegateExpression="${ragStartMedia}" camunda:asyncBefore="true"><bpmn:extensionElements><camunda:failedJobRetryTimeCycle>R3/PT10S</camunda:failedJobRetryTimeCycle></bpmn:extensionElements></bpmn:serviceTask>
+      <bpmn:intermediateCatchEvent id="MediaTimer"><bpmn:timerEventDefinition><bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15S</bpmn:timeDuration></bpmn:timerEventDefinition></bpmn:intermediateCatchEvent>
+      <bpmn:serviceTask id="PollMedia" name="确认真实转码结果" camunda:delegateExpression="${ragPollMedia}" camunda:asyncBefore="true"><bpmn:extensionElements><camunda:failedJobRetryTimeCycle>R3/PT15S</camunda:failedJobRetryTimeCycle></bpmn:extensionElements></bpmn:serviceTask>
+      <bpmn:exclusiveGateway id="MediaReady" default="waitMore"/>
+      <bpmn:serviceTask id="RagIndex" name="多模态索引与真实查询验收" camunda:type="external" camunda:topic="drama-rag-index"/>
+      <bpmn:exclusiveGateway id="RagCurrent" default="ragOk"/>
+      <bpmn:endEvent id="InnerSuperseded"><bpmn:terminateEventDefinition/></bpmn:endEvent>
+      <bpmn:parallelGateway id="Join"/>
+      <bpmn:serviceTask id="Publish" name="原子切换发布版本并上架" camunda:delegateExpression="${ragPublish}" camunda:asyncBefore="true"><bpmn:extensionElements><camunda:failedJobRetryTimeCycle>R3/PT15S</camunda:failedJobRetryTimeCycle></bpmn:extensionElements></bpmn:serviceTask>
+      <bpmn:endEvent id="InnerEnd"/>
+      <bpmn:sequenceFlow id="s1" sourceRef="InnerStart" targetRef="AiReview"/>
+      <bpmn:sequenceFlow id="s2" sourceRef="AiReview" targetRef="HumanReview"/>
+      <bpmn:sequenceFlow id="s3" sourceRef="HumanReview" targetRef="Decision"/>
+      <bpmn:sequenceFlow id="approve" sourceRef="Decision" targetRef="Split"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approve}</bpmn:conditionExpression></bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="reject" sourceRef="Decision" targetRef="Publish"/>
+      <bpmn:sequenceFlow id="s4" sourceRef="Split" targetRef="StartMedia"/>
+      <bpmn:sequenceFlow id="s5" sourceRef="StartMedia" targetRef="MediaTimer"/>
+      <bpmn:sequenceFlow id="s6" sourceRef="MediaTimer" targetRef="PollMedia"/>
+      <bpmn:sequenceFlow id="s7" sourceRef="PollMedia" targetRef="MediaReady"/>
+      <bpmn:sequenceFlow id="waitMore" sourceRef="MediaReady" targetRef="MediaTimer"/>
+      <bpmn:sequenceFlow id="mediaOk" sourceRef="MediaReady" targetRef="Join"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${mediaReady}</bpmn:conditionExpression></bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="s8" sourceRef="Split" targetRef="RagIndex"/>
+      <bpmn:sequenceFlow id="s9" sourceRef="RagIndex" targetRef="RagCurrent"/>
+      <bpmn:sequenceFlow id="ragOld" sourceRef="RagCurrent" targetRef="InnerSuperseded"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${ragSuperseded}</bpmn:conditionExpression></bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="ragOk" sourceRef="RagCurrent" targetRef="Join"/>
+      <bpmn:sequenceFlow id="s10" sourceRef="Join" targetRef="Publish"/>
+      <bpmn:sequenceFlow id="s11" sourceRef="Publish" targetRef="InnerEnd"/>
+    </bpmn:subProcess>
+    <bpmn:boundaryEvent id="Obsolete" attachedToRef="Publication"><bpmn:errorEventDefinition errorRef="SupersededError"/></bpmn:boundaryEvent>
+    <bpmn:endEvent id="SupersededEnd" name="版本已替代"/>
+    <bpmn:endEvent id="End"/>
+    <bpmn:sequenceFlow id="f1" sourceRef="Publication" targetRef="End"/>
+    <bpmn:sequenceFlow id="f2" sourceRef="Obsolete" targetRef="SupersededEnd"/>
+  </bpmn:process>
+</bpmn:definitions>

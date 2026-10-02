@@ -1,68 +1,59 @@
-# AI Service
+# Kcat AI Service
 
-Kcat 的独立 Python AI 模块，使用 FastAPI 提供 HTTP 服务，预置 LangChain 和 LangGraph 依赖。要求 Python 3.10 或更高版本，默认监听 `127.0.0.1:7777`。
+作者：liaochengjie。沿用原有 `ai-service` 的 Python 分层，集中实现多模态证据索引与情节检索，不加入 Maven reactor。Python 3.12，默认监听 `127.0.0.1:7777`；API 与索引 worker 使用同一份代码，分别运行。
 
-## 本地启动（PowerShell）
-
-在项目根目录执行：
-
-```powershell
-cd ruoyi-modules/ai-service
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e .
-.\.venv\Scripts\python.exe -m ai_service
-```
-
-健康检查：<http://127.0.0.1:7777/health>
-
-接口文档：<http://127.0.0.1:7777/docs>
-
-开发时需要自动重载，可使用：
-
-```powershell
-.\.venv\Scripts\python.exe -m uvicorn ai_service.main:app --host 127.0.0.1 --port 7777 --reload
-```
-
-Linux / macOS 将上述虚拟环境中的 Python 路径替换为 `.venv/bin/python`。
-
-## 基础分层
-
-这些是本模块采用的分层约定，并非 Python 强制要求的目录。每个分类目录都包含 `__init__.py`，可以作为 Python 包导入。
+## 目录与职责
 
 ```text
 ai-service/
 ├── ai_service/
-│   ├── __init__.py
-│   ├── __main__.py          # 服务启动入口
-│   ├── main.py              # 创建 FastAPI 应用、注册路由
-│   ├── config/
-│   │   ├── __init__.py
-│   │   └── settings.py      # 应用配置，默认端口 7777
-│   ├── controllers/
-│   │   ├── __init__.py
-│   │   └── health.py        # 健康检查接口
-│   ├── services/            # 业务逻辑
-│   ├── schemas/             # 请求、响应的数据校验模型
-│   ├── models/              # 领域实体、后续持久化模型
-│   ├── repositories/        # 数据访问
-│   └── utils/               # 公共工具
-├── .gitignore
-├── pyproject.toml           # Python 包及依赖声明
-└── README.md
+│   ├── __main__.py          # python -m ai_service 启动入口
+│   ├── main.py              # FastAPI 应用及路由注册
+│   ├── cli.py               # worker、配置检查和运维命令
+│   ├── config/              # settings.py，配置与原有服务元信息
+│   ├── controllers/         # health.py、rag.py，HTTP 接口
+│   ├── services/            # 模型、媒体处理、索引流程、搜索及服务组合
+│   ├── schemas/             # 请求、快照和场景校验模型
+│   ├── models/              # 领域错误
+│   ├── repositories/        # 任务持久化、Milvus 访问
+│   └── utils/               # HTTP 传输、本地配置检查
+├── .env.example             # 配置样例
+├── pyproject.toml           # 包信息、作者和固定直接依赖
+└── requirements.lock        # 安装依赖锁定
 ```
 
-| Python 包 | 对应 Java 分层 | 职责 |
-| --- | --- | --- |
-| `config` | Config | 应用配置及基础设施初始化配置 |
-| `controllers` | Controller | 定义 HTTP 路由、接收请求、调用服务 |
-| `services` | Service | 实现业务逻辑、组织业务流程 |
-| `schemas` | DTO / VO | 定义请求和响应的数据结构，按需使用 Pydantic 校验 |
-| `models` | Entity / Domain | 定义领域实体及后续持久化模型 |
-| `repositories` | Mapper / DAO / Repository | 封装数据库等数据源访问 |
-| `utils` | Utils | 与具体业务无关的公共工具 |
+AI 逻辑集中在本模块；内容审核、VOD 完成确认和最终上架由既有 Java 服务负责。Java 接入类沿用各服务原有 controller、biz/impl、business/impl、config/Config 和 job 分层。只有同一内容版本的审核、媒体处理和索引验收全部完成后才自动上架，搜索入口对所有人开放。
 
-后续新增接口时，在 `controllers` 中定义 `APIRouter`，在 `main.py` 中通过 `app.include_router(...)` 注册；业务逻辑放在 `services`，需要持久化时再添加 `repositories` 和 `models` 的实现。
+## 本地运行
 
-目前只实现配置、应用入口和健康检查，其余分类包为空骨架，没有调用模型，不需要 API Key。模型集成和业务代码后续按需添加。
+在仓库的 `ruoyi-modules/ai-service` 中执行。首次运行需先按下方步骤安装，已有 `.venv` 时可直接启动：
 
-该模块独立安装和运行，不加入 Maven 构建；当前未接入网关、Nacos、数据库或鉴权。`/health` 仅检查服务进程是否可用。
+```powershell
+& '.venv/Scripts/python.exe' -m ai_service
+# 或指定端口
+& '.venv/Scripts/python.exe' -m ai_service.cli api --port 7777
+```
+
+健康接口为 <http://127.0.0.1:7777/health>，接口文档为 <http://127.0.0.1:7777/docs>。`/health/ready` 检查实际依赖，缺配置或依赖时返回 503。启动 API 不会建表、启动 Docker 或调用模型。
+
+```powershell
+& '.venv/Scripts/python.exe' -m ai_service.cli doctor
+```
+
+测试和评测工具仅在本地开发目录保留，不随本仓库提交，API、worker 和运维 CLI 均不依赖它们。契约文件用 `python -m ai_service.cli schemas` 按需导出到忽略的 `.generated/contracts/`。
+
+`doctor` 仅检查本地配置，不访问外部服务或输出密钥，缺配置时退出码为 1。后续联调前需要补 `BAILIAN_WORKSPACE_ID`，或同时填写业务空间的 `BAILIAN_BASE_URL` 与 `BAILIAN_RERANK_URL`。新机器复制 `.env.example` 为 `.env` 并填写配置；已有 `.env` 时勿覆盖。Java 配置需另行通过环境或 Nacos 注入，`RAG_PYTHON_URL` 默认使用 7777。
+
+## 安装与后续联调
+
+新机器安装：
+
+```powershell
+py -3.12 -m venv .venv
+& '.venv/Scripts/python.exe' -m pip install -r requirements.lock
+& '.venv/Scripts/python.exe' -m pip install --no-deps --no-build-isolation -e .
+```
+
+SQL 统一放在项目 `script/sql/update/`，其中 `ai_rag_v1.sql` 仅用于独立 AI 数据库。Docker、数据库迁移、真实视频与模型测试留待后续联调；完成依赖准备后再运行 `init-db`、`init-index` 和独立 `worker`。
+
+详细操作见 [运行手册](../../docs/ai/runbook.md)；接口、分页和证据字段见 [接口契约](../../docs/ai/contracts.md)。

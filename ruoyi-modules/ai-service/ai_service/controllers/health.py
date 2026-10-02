@@ -1,12 +1,17 @@
-"""Process health endpoint."""
-
-from fastapi import APIRouter
-
+"""Process and dependency health endpoints."""
+from fastapi import APIRouter, Depends
+from ai_service.services.runtime import service
+from ai_service.services.rag_service import RagService
 
 router = APIRouter(tags=["health"])
 
 
 @router.get("/health")
-def health() -> dict[str, str]:
-    """Report process health without calling external dependencies."""
-    return {"status": "ok", "service": "ai-service"}
+@router.get("/health/live")
+def live():
+    return {"status": "UP"}
+
+
+@router.get("/health/ready")
+def ready(rag: RagService = Depends(service)):
+    return rag.ready()

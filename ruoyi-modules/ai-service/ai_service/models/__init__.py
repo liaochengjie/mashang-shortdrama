@@ -1,1 +1,1 @@
-"""Domain entities and future persistence models."""
+"""Kcat AI service."""

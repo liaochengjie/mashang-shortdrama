@@ -1,5 +1,7 @@
 package com.lfy.kcat.content.biz.impl;
 
+import com.lfy.kcat.content.biz.RagReleaseService;
+
 import cn.hutool.core.io.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -35,9 +37,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author liaochengjie
+ */
 @Service
 @Slf4j
 public class TencentVodServiceImpl implements TencentVodService {
+    @Autowired
+    private RagReleaseService ragRelease;
+
+    private void rejectManagedLegacy(Long dramaId) {
+        if (ragRelease.managed(dramaId)) throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT,"LEGACY_PROCESS_REQUIRES_MANUAL_MAPPING");
+    }
 
     @Autowired
     DramasMapper dramasMapper;
@@ -58,6 +69,7 @@ public class TencentVodServiceImpl implements TencentVodService {
     XxlHttp xxlHttp;
     @Override
     public void vodTranslator(Long dramaId) {
+        rejectManagedLegacy(dramaId);
         //获取登录时候的cookie信息
         HttpCookie httpCookie = xxlHttp.mockLogin();
         Map<String, Object> infoMap = new HashMap<>();
@@ -77,6 +89,7 @@ public class TencentVodServiceImpl implements TencentVodService {
 
     @Override
     public void vodInfoFlowTranslator(Long dramaId) {
+        rejectManagedLegacy(dramaId);
         log.info("正在进行信息流的上传转码（即预告片）");
         Dramas dramas = dramasMapper.selectById(dramaId);
 
@@ -116,6 +129,7 @@ public class TencentVodServiceImpl implements TencentVodService {
 
     @Override
     public void vodQualityTranslator(Long dramaId) {
+        rejectManagedLegacy(dramaId);
         log.info("正在进行画质流的上传转码(即正片)");
         //获取所有的剧集
         LambdaQueryWrapper<Episodes> eq = Wrappers

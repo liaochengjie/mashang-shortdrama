@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfy.kcat.interaction.mapper.ShareRecordsMapper">
+
+    <resultMap id="BaseResultMap" type="com.lfy.kcat.interaction.domain.ShareRecords">
+            <id property="shareId" column="share_id" />
+            <result property="userId" column="user_id" />
+            <result property="dramaId" column="drama_id" />
+            <result property="episodeId" column="episode_id" />
+            <result property="shareType" column="share_type" />
+            <result property="sharePlatform" column="share_platform" />
+            <result property="shareContent" column="share_content" />
+            <result property="shareUrl" column="share_url" />
+            <result property="ipAddress" column="ip_address" />
+            <result property="location" column="location" />
+            <result property="deviceInfo" column="device_info" />
+            <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        share_id,user_id,drama_id,episode_id,share_type,share_platform,
+        share_content,share_url,ip_address,location,device_info,
+        create_time
+    </sql>
+</mapper>

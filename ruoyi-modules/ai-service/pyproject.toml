@@ -1,19 +1,20 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools==84.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "kcat-ai-service"
+description = "Kcat AI service: multimodal evidence indexing and search"
+authors = [{name = "liaochengjie"}]
 version = "0.1.0"
-description = "Kcat AI service built with Python, LangChain and LangGraph"
-requires-python = ">=3.10"
+requires-python = ">=3.12,<3.13"
 dependencies = [
-    "fastapi>=0.115,<1.0",
-    "uvicorn>=0.30,<1.0",
-    "langchain>=1.0,<2.0",
-    "langgraph>=1.0,<2.0",
+  "fastapi==0.115.12", "pydantic==2.11.7", "uvicorn==0.34.3",
+  "pymilvus==2.5.16", "PyMySQL==1.1.1",
 ]
 
+[project.scripts]
+kcat-ai = "ai_service.cli:main"
+
 [tool.setuptools.packages.find]
-where = ["."]
 include = ["ai_service*"]

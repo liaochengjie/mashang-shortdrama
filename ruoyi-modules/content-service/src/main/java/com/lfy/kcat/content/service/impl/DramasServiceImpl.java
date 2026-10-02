@@ -1,5 +1,7 @@
 package com.lfy.kcat.content.service.impl;
 
+import com.lfy.kcat.content.biz.RagReleaseService;
+
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
@@ -23,7 +25,7 @@ import java.util.Collection;
 /**
  * 短剧管理Service业务层处理
  *
- * @author leifengyang
+ * @author liaochengjie
  * @date 2025-10-28
  */
 @Slf4j
@@ -32,6 +34,7 @@ import java.util.Collection;
 public class DramasServiceImpl implements IDramasService {
 
     private final DramasMapper baseMapper;
+    private final RagReleaseService ragRelease;
 
     /**
      * 查询短剧管理
@@ -138,10 +141,22 @@ public class DramasServiceImpl implements IDramasService {
      * @return 是否修改成功
      */
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public Boolean updateByBo(DramasBo bo) {
         Dramas update = MapstructUtils.convert(bo, Dramas.class);
         validEntityBeforeSave(update);
-        return baseMapper.updateById(update) > 0;
+        Dramas prior = baseMapper.selectById(bo.getDramaId());
+        // Audit is owned by the versioned approval flow, not generic CRUD form fields.
+        if (prior!=null && ragRelease.managed(bo.getDramaId())) update.setAuditStatus(prior.getAuditStatus());
+        boolean changed = baseMapper.updateById(update) > 0;
+        if (changed && prior != null && ragRelease.enabled()) {
+            if (bo.getStatus()!=null && !java.util.Objects.equals(prior.getStatus(),bo.getStatus())) ragRelease.shelfIntent(bo.getDramaId(), bo.getStatus());
+            Dramas current = baseMapper.selectById(bo.getDramaId());
+            if (!java.util.Objects.equals(prior.getTitle(), current.getTitle()) || !java.util.Objects.equals(prior.getDescription(), current.getDescription()) ||
+                !java.util.Objects.equals(prior.getStoryLine(), current.getStoryLine()) || !java.util.Objects.equals(prior.getCover(), current.getCover()))
+                ragRelease.refreshIfManaged(bo.getDramaId());
+        }
+        return changed;
     }
 
     /**
@@ -159,10 +174,12 @@ public class DramasServiceImpl implements IDramasService {
      * @return 是否删除成功
      */
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
+        ragRelease.deleted(ids);
         return baseMapper.deleteByIds(ids) > 0;
     }
 }

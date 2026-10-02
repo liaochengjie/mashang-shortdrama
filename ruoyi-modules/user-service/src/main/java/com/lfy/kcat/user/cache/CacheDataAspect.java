@@ -14,10 +14,15 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 
+/**
+ * @author liaochengjie
+ */
 @Component
 @Aspect
 @Slf4j
 public class CacheDataAspect {
+    @org.springframework.beans.factory.annotation.Value("${rag.enabled:false}")
+    private boolean ragEnabled;
 
     @Autowired
     RedisService redisService;
@@ -27,6 +32,8 @@ public class CacheDataAspect {
     RedissonClient redissonClient;
     @Around("@annotation(com.lfy.kcat.user.cache.CacheData)")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        // Always consult publication validity before serving content in versioned mode.
+        if (ragEnabled) return joinPoint.proceed();
         log.info("环绕通知开始");
         //获取注解中的值
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();

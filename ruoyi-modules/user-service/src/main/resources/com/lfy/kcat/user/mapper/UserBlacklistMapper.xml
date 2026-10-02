@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfy.kcat.user.mapper.UserBlacklistMapper">
+
+    <resultMap id="BaseResultMap" type="com.lfy.kcat.user.domain.UserBlacklist">
+            <id property="blacklistId" column="blacklist_id" />
+            <result property="userId" column="user_id" />
+            <result property="blockedUserId" column="blocked_user_id" />
+            <result property="reason" column="reason" />
+            <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        blacklist_id,user_id,blocked_user_id,reason,create_time
+    </sql>
+</mapper>

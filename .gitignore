@@ -47,3 +47,85 @@ nbdist/
 .flattened-pom.xml
 
 **/docker/**/data
+
+######################################################################
+# Local runtime files and upload exclusions
+
+# Credentials stay local; commit only public configuration examples.
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+**/application-local.yml
+**/application-local.yaml
+**/application-local.properties
+
+# Personal tools and IDE launch settings.
+/.claude/
+/.codex/
+/.agents/
+/.run/
+/.vscode/
+.DS_Store
+Thumbs.db
+
+# Dependencies, caches, reports and generated contracts.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage*
+htmlcov/
+coverage/
+node_modules/
+dist/
+.test-temp/
+.generated/
+ruoyi-modules/ai-service/data/
+ruoyi-modules/ai-service/reports/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.dump
+*.sql.gz
+*.bak
+
+# Docker runtime data; preserve versioned configuration and placeholder README files.
+/script/docker/**/logs/*
+!/script/docker/**/logs/README.md
+/script/docker/**/log/*
+!/script/docker/**/log/README.md
+/script/docker/**/store/*
+!/script/docker/**/store/README.md
+/script/docker/minio/config/
+
+# Internal handoff documents and pre-existing repair backups.
+/docs/ai/archive/
+/.rag-preexisting/
+
+# Tests and local validation tools stay on disk, outside the GitHub source tree.
+**/src/test/
+**/tests/
+**/test-results/
+**/playwright-report/
+/ruoyi-modules/ai-service/scripts/verify_models.py
+/ruoyi-modules/ai-service/scripts/verify_milvus.py
+/ruoyi-modules/ai-service/scripts/evaluate.py
+/ruoyi-modules/ai-service/resources/evaluation-labels.example.jsonl
+
+# Independent demos, temporary debug endpoints and local request fixtures.
+/ruoyi-example/
+/ruoyi-modules/user-service/src/main/java/com/lfy/kcat/user/otherTestController/
+/ruoyi-modules/user-service/src/main/java/com/lfy/kcat/user/controller/RedissonTestController.java
+/publish.json
+/docs/ai/github-checklist.md

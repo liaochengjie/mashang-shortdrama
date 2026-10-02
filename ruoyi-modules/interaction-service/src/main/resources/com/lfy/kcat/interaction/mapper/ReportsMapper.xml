@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfy.kcat.interaction.mapper.ReportsMapper">
+
+    <resultMap id="BaseResultMap" type="com.lfy.kcat.interaction.domain.Reports">
+            <id property="reportId" column="report_id" />
+            <result property="userId" column="user_id" />
+            <result property="targetId" column="target_id" />
+            <result property="targetType" column="target_type" />
+            <result property="targetUserId" column="target_user_id" />
+            <result property="reasonType" column="reason_type" />
+            <result property="reason" column="reason" />
+            <result property="description" column="description" />
+            <result property="evidenceImages" column="evidence_images" />
+            <result property="ipAddress" column="ip_address" />
+            <result property="location" column="location" />
+            <result property="deviceInfo" column="device_info" />
+            <result property="status" column="status" />
+            <result property="handlerId" column="handler_id" />
+            <result property="handleResult" column="handle_result" />
+            <result property="handleTime" column="handle_time" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        report_id,user_id,target_id,target_type,target_user_id,reason_type,
+        reason,description,evidence_images,ip_address,location,
+        device_info,status,handler_id,handle_result,handle_time,
+        create_time,update_time
+    </sql>
+</mapper>

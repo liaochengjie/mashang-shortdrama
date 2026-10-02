@@ -1,5 +1,7 @@
 package com.lfy.kcat.content.controller;
 
+import com.lfy.kcat.content.biz.RagReleaseService;
+
 import com.lfy.kcat.content.biz.AuthCheckService;
 import com.lfy.kcat.content.vo.ManualAuthTaskVo;
 import lombok.extern.slf4j.Slf4j;
@@ -10,11 +12,22 @@ import org.dromara.common.core.dto.DramaAuthStartDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+/**
+ * @author liaochengjie
+ */
 @Slf4j
 @RestController
 public class AuthCheckController {
     @Autowired
     AuthCheckService authCheckService;
+    @Autowired private RagReleaseService ragRelease;
+
+    @GetMapping("/dramas/rag-draft/{dramaId}")
+    @cn.dev33.satoken.annotation.SaCheckPermission("content:dramas:query")
+    public R<java.util.Map<String,Object>> ragDraft(@PathVariable Long dramaId) {
+        if (!ragRelease.enabled()) throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE,"RAG_DISABLED");
+        return R.ok(ragRelease.draft(dramaId));
+    }
 
     /**
      * 更新数据库状态
@@ -35,6 +48,7 @@ public class AuthCheckController {
      */
 
     @PostMapping("/dramas/authcheck")
+    @cn.dev33.satoken.annotation.SaCheckPermission("content:dramas:edit")
     public R manualCheckTask(@RequestBody ManualAuthTaskVo manualAuthTaskVo,
                              @RequestHeader("Authorization") String authorization) {
         //更新数据库表并且推进流程

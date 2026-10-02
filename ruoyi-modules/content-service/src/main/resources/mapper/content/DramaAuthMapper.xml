@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfy.kcat.content.mapper.DramaAuthMapper">
+
+    <resultMap id="BaseResultMap" type="com.lfy.kcat.content.domain.DramaAuth">
+            <id property="id" column="id" />
+            <result property="dramaId" column="drama_id" />
+            <result property="processId" column="process_id" />
+            <result property="stepName" column="step_name" />
+            <result property="authStatus" column="auth_status" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,drama_id,process_id,step_name,auth_status
+    </sql>
+</mapper>

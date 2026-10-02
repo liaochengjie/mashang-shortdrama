@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfy.kcat.user.mapper.UserLevelConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.lfy.kcat.user.domain.UserLevelConfig">
+            <id property="level" column="level" />
+            <result property="levelName" column="level_name" />
+            <result property="minExperience" column="min_experience" />
+            <result property="maxExperience" column="max_experience" />
+            <result property="privileges" column="privileges" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        level,level_name,min_experience,max_experience,privileges,create_time,
+        update_time
+    </sql>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfy.kcat.user.mapper.UserBrowseHistoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.lfy.kcat.user.domain.UserBrowseHistory">
+            <id property="historyId" column="history_id" />
+            <result property="userId" column="user_id" />
+            <result property="dramaId" column="drama_id" />
+            <result property="title" column="title" />
+            <result property="cover" column="cover" />
+            <result property="browseTime" column="browse_time" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        history_id,user_id,drama_id,title,cover,browse_time,
+        create_time,update_time
+    </sql>
+</mapper>

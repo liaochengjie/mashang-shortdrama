@@ -1,1 +1,1 @@
-"""Request and response validation models (DTOs), typically using Pydantic."""
+"""Kcat AI service."""

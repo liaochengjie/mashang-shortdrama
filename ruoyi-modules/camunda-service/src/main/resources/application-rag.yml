@@ -1,0 +1,8 @@
+rag:
+  internal-token: ${CAMUNDA_INTERNAL_TOKEN:}
+  worker-token: ${CAMUNDA_WORKER_TOKEN:}
+  content-token: ${RAG_INTERNAL_TOKEN:}
+  content-url: ${CONTENT_SERVICE_URL:http://127.0.0.1:10001}
+server:
+  error:
+    include-message: always

@@ -1,5 +1,8 @@
 package com.lfy.kcat.content.biz.impl;
 
+import com.lfy.kcat.content.biz.RagReleaseService;
+import com.lfy.kcat.content.biz.RagPublishedViews;
+
 import com.alibaba.fastjson2.util.DateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -29,9 +32,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author liaochengjie
+ */
 @Service
 @Slf4j
 public class DramaHomeServiceImpl implements DramaHomeService {
+    @Autowired
+    private RagReleaseService ragRelease;
+    @Autowired
+    private RagPublishedViews ragViews;
 
     @Autowired
     IDramasService iDramasService;
@@ -59,6 +69,7 @@ public class DramaHomeServiceImpl implements DramaHomeService {
      */
     @Override
     public HomeFeaturedDTO getHomeFeaturedDrama(PageReqDTO pageReqDTO) {
+        if (ragRelease.enabled()) return ragViews.featured(pageReqDTO);
         HomeFeaturedDTO featuredDTO = new HomeFeaturedDTO();
         //1）、信息流所在的某一集信息
         PageQuery pageQuery = new PageQuery(pageReqDTO.getPageSize(), pageReqDTO.getPage());
@@ -169,11 +180,12 @@ public class DramaHomeServiceImpl implements DramaHomeService {
      */
     @Override
     public HomeDramaEpisodesDTO getDramaEpisodes(Long dramaId) {
+        if (ragRelease.enabled()) return ragViews.episodes(dramaId);
         log.info("开始获取短剧所有数据,dramaId:{}", dramaId);
         //查询剧集详情数据
         HomeDramaEpisodesDTO homeDramaEpisodesDTO = new HomeDramaEpisodesDTO();
         //剧集id
-        homeDramaEpisodesDTO.setDramaId(dramaId.intValue());
+        homeDramaEpisodesDTO.setDramaId(dramaId.toString());
 
 
         DramasVo dramasVo = iDramasService.queryById(dramaId);
@@ -246,6 +258,7 @@ public class DramaHomeServiceImpl implements DramaHomeService {
 
     @Override
     public HomeDramaInfoDTO getDramaInfo(Long dramaId) {
+        if (ragRelease.enabled()) return ragViews.info(dramaId);
         HomeDramaInfoDTO homeDramaInfoDTO = new HomeDramaInfoDTO();
         DramasVo dramasVo = iDramasService.queryById(dramaId);
         homeDramaInfoDTO.setCover(dramasVo.getCover());

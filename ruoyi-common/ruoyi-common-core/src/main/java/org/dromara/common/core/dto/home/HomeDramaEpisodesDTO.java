@@ -5,10 +5,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * @author liaochengjie
+ */
 @NoArgsConstructor
 @Data
 public class HomeDramaEpisodesDTO {
-    private Integer dramaId;
+    private String dramaId;
+    private Long sourceVersion;
+    private String buildId;
+    private String embeddingProfile;
     private DramaInfoDTO dramaInfo;
     private List<EpisodesDTO> episodes;
     private StatisticsDTO statistics;
@@ -43,6 +49,8 @@ public class HomeDramaEpisodesDTO {
     @NoArgsConstructor
     @Data
     public static class EpisodesDTO {
+        private Integer episodeNumber;
+        private String mediaIdentity;
         //剧集id
         private String cid;
         private String episode;

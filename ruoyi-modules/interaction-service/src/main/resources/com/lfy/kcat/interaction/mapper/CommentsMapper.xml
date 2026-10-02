@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfy.kcat.interaction.mapper.CommentsMapper">
+
+    <resultMap id="BaseResultMap" type="com.lfy.kcat.interaction.domain.Comments">
+            <id property="commentId" column="comment_id" />
+            <result property="userId" column="user_id" />
+            <result property="userNickname" column="user_nickname" />
+            <result property="userAvatar" column="user_avatar" />
+            <result property="dramaId" column="drama_id" />
+            <result property="episodeId" column="episode_id" />
+            <result property="content" column="content" />
+            <result property="parentId" column="parent_id" />
+            <result property="rootId" column="root_id" />
+            <result property="replyUserId" column="reply_user_id" />
+            <result property="replyUserNickname" column="reply_user_nickname" />
+            <result property="likeCount" column="like_count" />
+            <result property="dislikeCount" column="dislike_count" />
+            <result property="replyCount" column="reply_count" />
+            <result property="isHot" column="is_hot" />
+            <result property="isTop" column="is_top" />
+            <result property="ipAddress" column="ip_address" />
+            <result property="location" column="location" />
+            <result property="deviceInfo" column="device_info" />
+            <result property="status" column="status" />
+            <result property="auditStatus" column="audit_status" />
+            <result property="auditReason" column="audit_reason" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        comment_id,user_id,user_nickname,user_avatar,drama_id,episode_id,
+        content,parent_id,root_id,reply_user_id,reply_user_nickname,
+        like_count,dislike_count,reply_count,is_hot,is_top,
+        ip_address,location,device_info,status,audit_status,
+        audit_reason,create_time,update_time
+    </sql>
+</mapper>

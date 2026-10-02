@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfy.kcat.user.mapper.UserFollowsMapper">
+
+    <resultMap id="BaseResultMap" type="com.lfy.kcat.user.domain.UserFollows">
+            <id property="followId" column="follow_id" />
+            <result property="followerId" column="follower_id" />
+            <result property="followeeId" column="followee_id" />
+            <result property="status" column="status" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        follow_id,follower_id,followee_id,status,create_time,update_time
+    </sql>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfy.kcat.interaction.mapper.ContentStatisticsMapper">
+
+    <resultMap id="BaseResultMap" type="com.lfy.kcat.interaction.domain.ContentStatistics">
+            <id property="statId" column="stat_id" />
+            <result property="contentId" column="content_id" />
+            <result property="contentType" column="content_type" />
+            <result property="commentCount" column="comment_count" />
+            <result property="danmakuCount" column="danmaku_count" />
+            <result property="likeCount" column="like_count" />
+            <result property="dislikeCount" column="dislike_count" />
+            <result property="shareCount" column="share_count" />
+            <result property="reportCount" column="report_count" />
+            <result property="hotScore" column="hot_score" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        stat_id,content_id,content_type,comment_count,danmaku_count,like_count,
+        dislike_count,share_count,report_count,hot_score,update_time
+    </sql>
+</mapper>

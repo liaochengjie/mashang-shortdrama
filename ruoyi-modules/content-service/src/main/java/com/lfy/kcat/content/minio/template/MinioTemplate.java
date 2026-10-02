@@ -1,5 +1,7 @@
 package com.lfy.kcat.content.minio.template;
 
+import com.lfy.kcat.content.biz.RagReleaseService;
+
 import com.lfy.kcat.content.minio.properties.MyMinioProperties;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
@@ -18,9 +20,14 @@ import java.util.Date;
 import java.util.UUID;
 
 
+/**
+ * @author liaochengjie
+ */
 @Component
 @Slf4j
 public class MinioTemplate {
+    @Autowired
+    private RagReleaseService ragReleaseService;
     String BUCKET_NAME="kcat";
     @Autowired
     private MinioClient minioClient;
@@ -47,14 +54,18 @@ public class MinioTemplate {
             bucketExistAndCreate(BUCKET_NAME);
 
 
+            java.security.MessageDigest checksum = java.security.MessageDigest.getInstance("SHA-256");
+            try (java.security.DigestInputStream stream = new java.security.DigestInputStream(file.getInputStream(), checksum)) {
             PutObjectArgs putObjectArgs = PutObjectArgs.builder()
                 .bucket(BUCKET_NAME)
                 .contentType(contentType)
-                .stream(file.getInputStream(), size, -1)
+                .stream(stream, size, -1)
                 .object(objectName)
                 .build();
             minioClient.putObject(putObjectArgs);
+            }
             url= myMinioProperties.getEndpoint()+"/"+BUCKET_NAME+"/"+objectName;
+            ragReleaseService.registerAsset(url, objectName, java.util.HexFormat.of().formatHex(checksum.digest()), size);
         }catch (Exception e){
             throw new RuntimeException(e);
         }

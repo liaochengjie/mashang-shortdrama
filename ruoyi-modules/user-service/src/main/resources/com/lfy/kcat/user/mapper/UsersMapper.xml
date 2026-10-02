@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lfy.kcat.user.mapper.UsersMapper">
+
+    <resultMap id="BaseResultMap" type="com.lfy.kcat.user.domain.Users">
+            <id property="userId" column="user_id" />
+            <result property="phone" column="phone" />
+            <result property="wechatOpenid" column="wechat_openid" />
+            <result property="qqOpenid" column="qq_openid" />
+            <result property="appleId" column="apple_id" />
+            <result property="nickname" column="nickname" />
+            <result property="avatar" column="avatar" />
+            <result property="gender" column="gender" />
+            <result property="birthday" column="birthday" />
+            <result property="location" column="location" />
+            <result property="signature" column="signature" />
+            <result property="level" column="level" />
+            <result property="experience" column="experience" />
+            <result property="registerTime" column="register_time" />
+            <result property="lastLoginTime" column="last_login_time" />
+            <result property="loginCount" column="login_count" />
+            <result property="status" column="status" />
+            <result property="isRealName" column="is_real_name" />
+            <result property="realName" column="real_name" />
+            <result property="idCard" column="id_card" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id,phone,wechat_openid,qq_openid,apple_id,nickname,
+        avatar,gender,birthday,location,signature,
+        level,experience,register_time,last_login_time,login_count,
+        status,is_real_name,real_name,id_card,create_time,
+        update_time
+    </sql>
+</mapper>

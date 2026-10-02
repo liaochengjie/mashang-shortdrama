@@ -137,7 +137,6 @@ kcat
 │  ├─ interaction-service       # 点赞/互动异步处理
 │  └─ camunda-service           # 审核工作流服务
 ├─ ruoyi-visual                  # 监控与中间件可视化模块
-├─ ruoyi-example                 # 示例模块
 └─ script
    ├─ config/nacos              # Nacos 配置
    └─ docker                    # Docker Compose 与中间件编排
@@ -235,3 +234,9 @@ mvn clean package -DskipTests
 - 本仓库重点展示后端微服务与业务实现，不包含完整前端工程。
 - 底座能力来源于 `RuoYi-Cloud-Plus`，业务模块与实现方式为本项目的二次开发内容。
 - 如果你是面试官，推荐优先阅读：`content-service`、`user-service`、`interaction-service`、`camunda-service` 这四个模块。
+
+## AI 模块与提交说明
+
+AI 实现集中在 [ai-service](ruoyi-modules/ai-service/README.md)，沿用原有 Python 分层；Java 服务保留内容审核、转码确认及版本化上架职责。依赖准备和详细运行步骤见 [运行手册](docs/ai/runbook.md)。敏感配置通过环境变量注入。
+
+测试源码、评测脚本、独立演示模块、模拟数据及个人配置仅在本地保留，不随本仓库提交。Maven 构建不再聚合 `ruoyi-example`；请假流程和其他原框架功能继续保留。

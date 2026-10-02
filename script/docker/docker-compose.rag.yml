@@ -1,0 +1,51 @@
+name: kcat-rag
+services:
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.18
+    command: etcd -advertise-client-urls=http://etcd:2379 -listen-client-urls=http://0.0.0.0:2379 --data-dir=/etcd
+    environment:
+      ETCD_AUTO_COMPACTION_MODE: revision
+      ETCD_AUTO_COMPACTION_RETENTION: "1000"
+      ETCD_QUOTA_BACKEND_BYTES: "4294967296"
+    volumes: [rag-etcd:/etcd]
+    healthcheck:
+      test: [CMD, etcdctl, endpoint, health]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  minio:
+    image: minio/minio:RELEASE.2024-05-28T17-19-04Z
+    command: minio server /data --console-address ':9001'
+    environment:
+      MINIO_ROOT_USER: ${RAG_MINIO_USER:?set RAG_MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${RAG_MINIO_PASSWORD:?set RAG_MINIO_PASSWORD}
+    volumes: [rag-minio:/data]
+    ports: [127.0.0.1:19000:9000, 127.0.0.1:19001:9001]
+    healthcheck:
+      test: [CMD, curl, -f, http://localhost:9000/minio/health/live]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  milvus:
+    image: milvusdb/milvus:v2.5.16
+    command: [milvus, run, standalone]
+    security_opt: [seccomp:unconfined]
+    environment:
+      ETCD_ENDPOINTS: etcd:2379
+      MINIO_ADDRESS: minio:9000
+      MINIO_ACCESS_KEY_ID: ${RAG_MINIO_USER:?set RAG_MINIO_USER}
+      MINIO_SECRET_ACCESS_KEY: ${RAG_MINIO_PASSWORD:?set RAG_MINIO_PASSWORD}
+    volumes: [rag-milvus:/var/lib/milvus]
+    ports: [127.0.0.1:19530:19530, 127.0.0.1:19091:9091]
+    depends_on:
+      etcd: {condition: service_healthy}
+      minio: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, curl, -f, http://localhost:9091/healthz]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+volumes:
+  rag-etcd:
+  rag-minio:
+  rag-milvus:

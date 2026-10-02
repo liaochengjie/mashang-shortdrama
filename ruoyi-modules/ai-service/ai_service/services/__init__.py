@@ -1,1 +1,1 @@
-"""Business logic, called by controllers."""
+"""Kcat AI service."""

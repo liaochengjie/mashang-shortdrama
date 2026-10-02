@@ -24,9 +24,14 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author liaochengjie
+ */
 @Slf4j
 @Service
 public class DramaBizServiceImpl implements DramaBizService {
+    @org.springframework.beans.factory.annotation.Value("${rag.enabled:false}")
+    private boolean ragEnabled;
 
     @Autowired
     ContentServiceFeignClient contentServiceFeignClient;
@@ -42,6 +47,7 @@ public class DramaBizServiceImpl implements DramaBizService {
     RedisService redisService;
     @Override
     public HomeFeaturedDTO getHomeFeature(PageReqDTO pageReqDTO) {
+        if (ragEnabled) return contentServiceFeignClient.featured(pageReqDTO).getData();
         String cacheKey= RedisConst.HOME_FEATURE_KEY
             +pageReqDTO.getPage()+":"
             +pageReqDTO.getPageSize();
